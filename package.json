@@ -1,0 +1,27 @@
+{
+  "name": "we-market-ecommerce",
+  "version": "1.0.0",
+  "description": "Full-stack B2B/B2C marketplace platform",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "seed": "node server/seeds/seedData.js"
+  },
+  "keywords": ["ecommerce", "marketplace", "b2b", "b2c"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.10.0",
+    "dotenv": "^16.3.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.1.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2",
+    "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
