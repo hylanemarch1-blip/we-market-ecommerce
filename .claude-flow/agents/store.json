@@ -1,0 +1,21 @@
+{
+  "agents": {
+    "agent-1790732526877-bakyhk": {
+      "agentId": "agent-1790732526877-bakyhk",
+      "agentType": "coder",
+      "status": "busy",
+      "health": 1,
+      "taskCount": 0,
+      "config": {
+        "provider": "anthropic",
+        "timeout": 300,
+        "autoTools": true
+      },
+      "createdAt": "2026-09-30T01:42:06.877Z",
+      "model": "sonnet",
+      "modelRoutedBy": "default",
+      "currentTask": "task-1790732880983-ba7u1f"
+    }
+  },
+  "version": "3.0.0"
+}

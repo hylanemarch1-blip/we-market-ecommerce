@@ -1,35 +1,36 @@
-# WE Market
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A polished, responsive marketplace prototype for global B2B and B2C commerce. WE Market connects verified manufacturers and suppliers from China, Europe, and Asia with buyers worldwide.
+## Getting Started
 
-## Included in this first release
-
-- Marketplace homepage wireframe inspired by modern ecommerce storefronts
-- B2B/B2C shopping mode toggle
-- Product search, category filters, promotional hero, flash deals, manufacturers, and trust sections
-- Buyer dashboard with orders, quotes, wishlist, and account shortcuts
-- Seller portal with sales KPIs, products, orders, quotes, and store health
-- Admin dashboard with marketplace KPIs, seller approvals, moderation queue, and activity feed
-- Login/register modal with buyer, seller, and admin demo role switching
-- Responsive CSS with no external runtime dependencies
-
-## Run locally
-
-Open `index.html` directly in a browser, or run a local server:
+First, run the development server:
 
 ```bash
-python3 -m http.server 4173
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Then visit http://localhost:4173.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Demo roles
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Use **Sign in** and select Buyer, Seller, or Admin to preview each dashboard. This is a frontend prototype; payment processing, persistence, KYC, and production authentication should be connected to a backend before launch.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Product roadmap
+## Learn More
 
-1. Connect authentication and role-based access to an API.
-2. Add PostgreSQL models for users, vendors, products, carts, orders, quotes, payouts, and reviews.
-3. Integrate payment, tax, shipping, search, notifications, and seller verification providers.
-4. Add automated tests, accessibility audit, security controls, and production deployment.
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
