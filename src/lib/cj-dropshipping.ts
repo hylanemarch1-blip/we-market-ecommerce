@@ -1,29 +1,37 @@
-import axios from 'axios';
+export interface CJProduct {
+  pid: string;
+  productName: string;
+  productSku: string;
+  productImage: string;
+  productPrice: string;
+}
 
-const CJ_BASE_URL = 'https://developers.cjdropshipping.com/api2.0/v1';
+export async function fetchCJProducts(keyword: string = ''): Promise<CJProduct[]> {
+  const apiKey = process.env.CJ_DROPSHIPPING_API_KEY;
+  if (!apiKey) {
+    console.warn('CJ_DROPSHIPPING_API_KEY is not set');
+    return [];
+  }
 
-export async function getCJAccessToken() {
   try {
-    const response = await axios.post(\\/authentication/getAccessToken\, {
-      email: process.env.CJ_DROPSHIPPING_EMAIL,
-      password: process.env.CJ_DROPSHIPPING_API_KEY,
-    });
-    return response.data?.data?.accessToken || null;
+    const response = await fetch(
+      `https://developers.cjdropshipping.com/api2.0/v1/product/list?pageNum=1&pageSize=20&keywords=${encodeURIComponent(keyword)}`,
+      {
+        headers: {
+          'CJ-Access-Token': apiKey,
+        },
+        next: { revalidate: 3600 },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`CJ API request failed: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data?.data?.list || [];
   } catch (error) {
-    console.error('Failed to get CJ access token:', error);
-    return null;
+    console.error('Error fetching products from CJ Dropshipping:', error);
+    return [];
   }
 }
-
-export async function fetchCJProducts(keywords = '', pageNum = 1, pageSize = 20) {
-  const token = await getCJAccessToken();
-  if (!token) throw new Error('CJ Authentication failed');
-
-  const response = await axios.get(\\/product/list\, {
-    headers: { 'CJ-Access-Token': token },
-    params: { keyWord: keywords, pageNum, pageSize },
-  });
-
-  return response.data?.data?.list || [];
-}
-
