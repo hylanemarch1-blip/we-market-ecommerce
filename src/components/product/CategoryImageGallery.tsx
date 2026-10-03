@@ -40,7 +40,7 @@ const CATEGORY_IMAGES: Record<string, CategoryCard[]> = {
     { name: "Fragrances", slug: "fragrances", image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&auto=format&fit=crop&q=80", itemCount: 156 },
     { name: "Hair Care", slug: "hair-care", image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=400&auto=format&fit=crop&q=80", itemCount: 198 },
     { name: "Bath & Body", slug: "bath-body", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&auto=format&fit=crop&q=80", itemCount: 123 },
-    { name: "Tools & Brushes", slug: "tools-brushes", image: "https://images.unsplash.com/photo-1599733594230-df1611e992e2?w=400&auto=format&fit=crop&q=80", itemCount: 87 },
+    { name: "Tools & Brushes", slug: "tools-brushes", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&auto=format&fit=crop&q=80", itemCount: 87 },
   ],
   sports: [
     { name: "Fitness Equipment", slug: "fitness", image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&auto=format&fit=crop&q=80", itemCount: 212 },
