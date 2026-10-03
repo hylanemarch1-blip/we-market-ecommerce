@@ -1,10 +1,42 @@
 {
-  "id": "swarm-1790733950350-iruu9u",
-  "topology": "hierarchical",
-  "maxAgents": 15,
+  "id": "swarm-muochbp8",
+  "swarmId": "swarm-muochbp8",
+  "objective": "Take over and implement missing full-stack e-commerce features as detailed in RUFLO_HANDOFF.md",
   "strategy": "development",
-  "v3Mode": false,
-  "permissions": null,
-  "initializedAt": "2026-09-30T02:05:50.350Z",
-  "status": "ready"
+  "status": "initialized",
+  "agents": 8,
+  "agentPlan": [
+    {
+      "role": "Coordinator",
+      "type": "coordinator",
+      "count": 1,
+      "purpose": "Orchestrate workflow"
+    },
+    {
+      "role": "Architect",
+      "type": "architect",
+      "count": 1,
+      "purpose": "System design"
+    },
+    {
+      "role": "Coder",
+      "type": "coder",
+      "count": 3,
+      "purpose": "Implementation"
+    },
+    {
+      "role": "Tester",
+      "type": "tester",
+      "count": 2,
+      "purpose": "Quality assurance"
+    },
+    {
+      "role": "Reviewer",
+      "type": "reviewer",
+      "count": 1,
+      "purpose": "Code review"
+    }
+  ],
+  "startedAt": "2026-09-30T16:53:52.197Z",
+  "parallel": true
 }
