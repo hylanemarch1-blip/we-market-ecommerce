@@ -74,21 +74,18 @@ const NAV_ITEMS = [
 
 const CATEGORIES_SEARCH = [
   "All categories",
-  "Computers & Accessories",
-  "Cell Phones",
-  "Gaming Gadgets",
-  "Smart Watches",
-  "Wired Headphone",
-  "Mouse & Keyboard",
-  "Headphone",
-  "Bluetooth Devices",
-  "Cloud Software",
-  "Electric Accessories",
-  "Mainboard & CPU",
-  "Desktop PC",
-  "Speaker",
-  "Bluetooth Headphone",
-  "Computer Decor",
+  "Fashion & Apparel",
+  "Mobiles & Tablets",
+  "Electronics & Tech",
+  "Home & Kitchen",
+  "Appliances",
+  "Beauty & Personal Care",
+  "Grocery & Food",
+  "Toys, Baby & Kids",
+  "Home Improvement & Tools",
+  "Sports, Fitness & Outdoors",
+  "Auto Accessories",
+  "Books & Stationery",
 ];
 
 const CATEGORIES_SIDEBAR = [
