@@ -39,10 +39,10 @@ const NAV_ITEMS = [
   },
   {
     label: "Vendors",
-    href: "/vendors",
+    href: "/vendor",
     children: [
-      { label: "Vendors Listing", href: "/vendors" },
-      { label: "Vendor Single", href: "/vendors/1" },
+      { label: "Vendors Listing", href: "/vendor" },
+      { label: "Vendor Center / Dashboard", href: "/seller/dashboard" },
     ],
   },
   {
@@ -170,7 +170,7 @@ export default function Header() {
           <ul className="flex gap-5 text-gray-500">
             <li><Link href="/about" className="hover:text-emerald-600 transition-colors">About Us</Link></li>
             <li><Link href="/careers" className="hover:text-emerald-600 transition-colors">Careers</Link></li>
-            <li><Link href="/seller/dashboard" className="hover:text-emerald-600 transition-colors font-medium text-emerald-600">Open a shop</Link></li>
+            <li><Link href="/vendor" className="hover:text-emerald-600 transition-colors font-medium text-emerald-600">Open a shop</Link></li>
           </ul>
 
           <div className="text-center">
