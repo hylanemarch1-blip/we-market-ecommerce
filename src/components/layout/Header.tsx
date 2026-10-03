@@ -450,7 +450,6 @@ export default function Header() {
 
             <div className="py-2">
               {CATEGORIES_SIDEBAR.map((cat) => {
-                const Icon = cat.icon;
                 const isOpen = openSidebarCategory === cat.label;
                 return (
                   <div key={cat.label} className="border-b border-gray-100 last:border-0">
