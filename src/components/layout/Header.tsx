@@ -89,18 +89,18 @@ const CATEGORIES_SEARCH = [
 ];
 
 const CATEGORIES_SIDEBAR = [
-  { icon: Monitor, label: "Computers & Accessories", subs: ["Computer Accessories", "Computer Cases", "Laptop", "HDD", "RAM", "Headphone"] },
-  { icon: Smartphone, label: "Cell Phones", subs: ["Phone Accessories", "Phone Cases", "Postpaid Phones", "Unlocked Phones", "Prepaid Phones", "iPhone", "Samsung Galaxy"] },
-  { icon: Gamepad2, label: "Gaming Gadgets", subs: ["Wireless Routers", "Cool New Gadgets", "Tech and Gadgets", "Geek Gifts", "Xbox Accessories", "PlayStation Accessories"] },
-  { icon: Watch, label: "Smart Watches", subs: ["Smart Watches", "Fashion Smart Watches", "Smart Bracelets", "Pocket Watches", "Smart Rings"] },
-  { icon: HeadphonesIcon, label: "Wired Headphone", subs: ["On-Ear Headphones", "Earbud & In-Ear", "DJ Headphones", "PC Accessories", "PC Game Headsets"] },
-  { icon: ArrowRightLeft, label: "Mouse & Keyboard", subs: ["Logitech", "Redragon", "Amazon Basics", "Microsoft", "MageGee"] },
-  { icon: Speaker, label: "Headphone", subs: ["Car Audio Systems", "Cellphones", "Desktops", "Gaming Consoles", "Telephones"] },
-  { icon: BluetoothIcon, label: "Bluetooth Devices", subs: ["Player Accessories", "Computer Accessories", "Speakers & Audio", "Computer Networking"] },
-  { icon: CloudIcon, label: "Cloud Software", subs: ["Android", "Linux & Unix", "Macintosh", "Windows", "iPhone & iOS"] },
-  { icon: Cpu, label: "Mainboard & CPU", subs: ["Computer CPU Processors", "Internal Fans & Cooling", "Graphics Cards", "Network I/O Port Cards"] },
-  { icon: Monitor, label: "Desktop PC", subs: ["Graphic PC", "Office PC", "Gaming PC", "Server"] },
-  { icon: Speaker, label: "Speaker", subs: ["JBL", "Anker", "Pyle", "Bose", "Logitech"] },
+  { label: "Fashion & Apparel", href: "/shop?category=fashion" },
+  { label: "Mobiles & Tablets", href: "/shop?category=mobiles" },
+  { label: "Electronics & Tech", href: "/shop?category=electronics" },
+  { label: "Home & Kitchen", href: "/shop?category=home-kitchen" },
+  { label: "Appliances", href: "/shop?category=appliances" },
+  { label: "Beauty & Personal Care", href: "/shop?category=beauty" },
+  { label: "Grocery & Food", href: "/shop?category=grocery" },
+  { label: "Toys, Baby & Kids", href: "/shop?category=toys" },
+  { label: "Home Improvement & Tools", href: "/shop?category=home-improvement" },
+  { label: "Sports, Fitness & Outdoors", href: "/shop?category=sports" },
+  { label: "Auto Accessories", href: "/shop?category=auto" },
+  { label: "Books & Stationery", href: "/shop?category=books" },
 ];
 
 const LANGUAGES = [
@@ -454,27 +454,16 @@ export default function Header() {
                 const isOpen = openSidebarCategory === cat.label;
                 return (
                   <div key={cat.label} className="border-b border-gray-100 last:border-0">
-                    <button
-                      onClick={() => setOpenSidebarCategory(isOpen ? null : cat.label)}
+                    <Link
+                      href={cat.href}
+                      onClick={() => setIsSidebarOpen(false)}
                       className="w-full flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-left"
                     >
-                      <Icon size={18} className="text-gray-400 shrink-0" />
-                      <span className="flex-1 font-medium">{cat.label}</span>
-                      <ChevronDown size={14} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
-                    </button>
+                      {cat.label}
+                    </Link>
                     {isOpen && (
                       <ul className="bg-gray-50 px-5 py-2">
-                        {cat.subs.map((sub) => (
-                          <li key={sub}>
-                            <Link
-                              href={`/shop?category=${encodeURIComponent(sub)}`}
-                              onClick={() => setIsSidebarOpen(false)}
-                              className="block py-1.5 text-xs text-gray-600 hover:text-emerald-600 transition-colors"
-                            >
-                              {sub}
-                            </Link>
-                          </li>
-                        ))}
+                        <li key="divider" className="border-b border-gray-200 h-px my-2" />
                       </ul>
                     )}
                   </div>
