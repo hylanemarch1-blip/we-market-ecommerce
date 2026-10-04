@@ -186,6 +186,25 @@ export const vendors: Vendor[] = [
     location: "Hyderabad, India",
     policies: ["Vet-formulated products", "Subscribe & save 15%", "7-day returns on sealed items"],
   },
+  {
+    id: "9",
+    slug: "fresh-mart-grocers",
+    name: "FreshMart Grocers",
+    description: "Farm-fresh produce, bakery, and daily dairy essentials",
+    logo: img("photo-1542838132-92c53300491e", 200, 200),
+    banner: img("photo-1488459716781-31db52582fe9", 1200, 400),
+    rating: 4.6,
+    reviewCount: 2654,
+    salesCount: 118000,
+    followerCount: 12700,
+    categories: ["Grocery", "Fruits & Vegetables", "Bakery", "Dairy"],
+    badges: ["Verified", "Farm Fresh", "Same-Day Delivery"],
+    shippingCoverage: ["Domestic"],
+    verified: true,
+    established: "2020",
+    location: "Pune, India",
+    policies: ["Freshness guaranteed", "Same-day delivery before 6 PM", "Easy refunds on damaged items"],
+  },
 ];
 
 export const vendorProducts: Record<string, VendorProduct[]> = {
@@ -246,6 +265,12 @@ export const vendorProducts: Record<string, VendorProduct[]> = {
     { id: "p8-3", name: "Ceramic Pet Feeding Bowl", category: "Care", price: 24.5, salePrice: 19.99, rating: 4.6, reviewCount: 421, image: img("photo-1589924691995-400dc9ecc119"), stock: 175 },
     { id: "p8-4", name: "Cozy Cat Kitten Kit", category: "Toys", price: 34.99, rating: 4.9, reviewCount: 654, image: img("photo-1450778869180-41d0601e046e"), stock: 130 },
     { id: "p8-5", name: "Grooming Brush & Comb Set", category: "Care", price: 18.99, rating: 4.5, reviewCount: 387, image: img("photo-1601758228041-f3b2795255f1"), stock: 290 },
+  ],
+  "9": [
+    { id: "p9-1", name: "Organic Fresh Apples 1kg", category: "Fruits & Vegetables", price: 4.99, salePrice: 3.99, rating: 4.8, reviewCount: 1245, image: img("photo-1560806887-1e4cd0b6cbd6"), stock: 120 },
+    { id: "p9-2", name: "Whole Grain Organic Bread", category: "Bakery", price: 3.49, rating: 4.5, reviewCount: 673, image: img("photo-1509440159596-0249088772ff"), stock: 60 },
+    { id: "p9-3", name: "Fresh Whole Milk 1 Gal", category: "Dairy", price: 3.99, salePrice: 3.49, rating: 4.9, reviewCount: 987, image: img("photo-1550583724-b2692b85b150"), stock: 85 },
+    { id: "p9-4", name: "Farm Eggs - Dozen", category: "Dairy", price: 2.99, rating: 4.7, reviewCount: 541, image: img("photo-1582722872445-44dc5f7e3c8f"), stock: 140 },
   ],
 };
 

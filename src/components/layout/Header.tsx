@@ -7,6 +7,8 @@ import {
   Headphones, Grid, ShoppingBag, ArrowRightLeft, Trash2,
   Smartphone, Monitor, Watch, HeadphonesIcon, Gamepad2, Cpu, Speaker
 } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { useCompare } from "@/context/CompareContext";
 
 const NAV_ITEMS = [
   {
@@ -29,8 +31,8 @@ const NAV_ITEMS = [
       { label: "Shop List - Left Sidebar", href: "/shop/list" },
       { label: "Shop List - Right Sidebar", href: "/shop/list-2" },
       { label: "Shop Fullwidth", href: "/shop/fullwidth" },
-      { label: "Single Product", href: "/product/1" },
-      { label: "Single Product 2", href: "/product/2" },
+      { label: "Single Product", href: "/products/1" },
+      { label: "Single Product 2", href: "/products/2" },
       { label: "Shop Cart", href: "/cart" },
       { label: "Shop Checkout", href: "/checkout" },
       { label: "Shop Compare", href: "/compare" },
@@ -113,11 +115,6 @@ const LANGUAGES = [
 
 const CURRENCIES = ["USD", "EUR", "AUD", "SGP"];
 
-const CART_ITEMS = [
-  { id: 1, name: "2022 Apple iMac with Retina 5K Display 8GB RAM, 256GB SSD", price: 2856.40, qty: 1, img: "/placeholder-product.png" },
-  { id: 2, name: "2022 Apple iMac with Retina 5K Display 8GB RAM, 256GB SSD", price: 2856.40, qty: 1, img: "/placeholder-product.png" },
-];
-
 function BluetoothIcon(props: React.ComponentProps<"svg">) {
   return (
     <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -144,6 +141,9 @@ export default function Header() {
   const [openSidebarCategory, setOpenSidebarCategory] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const { items: cartItems, count: cartCount, subtotal: cartTotal, removeItem } = useCart();
+  const { items: compareItems } = useCompare();
+
   const langRef = useRef<HTMLDivElement>(null);
   const currencyRef = useRef<HTMLDivElement>(null);
   const accountRef = useRef<HTMLDivElement>(null);
@@ -159,8 +159,6 @@ export default function Header() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const cartTotal = CART_ITEMS.reduce((sum, item) => sum + item.price * item.qty, 0);
 
   return (
     <>
@@ -310,59 +308,98 @@ export default function Header() {
               >
                 <ShoppingCart size={22} />
                 <span className="text-[10px] font-medium mt-0.5">Cart</span>
-                <span className="absolute -top-1.5 -right-3 bg-emerald-500 text-white text-[10px] rounded-full min-w-[18px] h-[18px] flex items-center justify-center font-bold px-1">
-                  2
-                </span>
+                {cartCount > 0 && (
+                  <span className="absolute -top-1.5 -right-3 bg-emerald-500 text-white text-[10px] rounded-full min-w-[18px] h-[18px] flex items-center justify-center font-bold px-1">
+                    {cartCount}
+                  </span>
+                )}
               </button>
 
               {isCartOpen && (
                 <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl z-50 w-[320px] p-5">
-                  {CART_ITEMS.map((item) => (
-                    <div key={item.id} className="flex gap-3 mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
-                      <div className="w-16 h-16 bg-gray-100 rounded-md shrink-0 flex items-center justify-center">
-                        <ShoppingBag size={24} className="text-gray-400" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <Link href={`/product/${item.id}`} className="text-sm font-medium text-gray-800 hover:text-emerald-600 line-clamp-2">
-                          {item.name}
-                        </Link>
-                        <p className="text-sm text-emerald-600 font-bold mt-1">
-                          {item.qty} × ${item.price.toLocaleString()}
-                        </p>
-                      </div>
-                      <button className="text-gray-400 hover:text-red-500 shrink-0 mt-1">
-                        <Trash2 size={16} />
-                      </button>
+                  {cartItems.length === 0 ? (
+                    <div className="text-center py-4">
+                      <ShoppingBag size={28} className="mx-auto text-gray-300 mb-2" />
+                      <p className="text-sm text-gray-500 mb-3">Your cart is empty</p>
+                      <Link
+                        href="/shop"
+                        onClick={() => setIsCartOpen(false)}
+                        className="inline-block text-sm font-medium text-emerald-600 hover:text-emerald-700"
+                      >
+                        Browse products
+                      </Link>
                     </div>
-                  ))}
-                  <div className="flex justify-between items-center pt-2 mb-4">
-                    <span className="font-bold text-gray-800">Total</span>
-                    <span className="font-bold text-emerald-600">${cartTotal.toLocaleString()}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Link
-                      href="/cart"
-                      onClick={() => setIsCartOpen(false)}
-                      className="flex-1 text-center py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
-                    >
-                      View cart
-                    </Link>
-                    <Link
-                      href="/checkout"
-                      onClick={() => setIsCartOpen(false)}
-                      className="flex-1 text-center py-2 text-sm font-medium bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transition-colors"
-                    >
-                      Checkout
-                    </Link>
-                  </div>
+                  ) : (
+                    <>
+                      {cartItems.map((item) => (
+                        <div key={item.productId} className="flex gap-3 mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
+                          <Link
+                            href={`/products/${item.productId}`}
+                            onClick={() => setIsCartOpen(false)}
+                            className="w-16 h-16 bg-gray-100 rounded-md shrink-0 overflow-hidden"
+                          >
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </Link>
+                          <div className="flex-1 min-w-0">
+                            <Link
+                              href={`/products/${item.productId}`}
+                              onClick={() => setIsCartOpen(false)}
+                              className="text-sm font-medium text-gray-800 hover:text-emerald-600 line-clamp-2"
+                            >
+                              {item.name}
+                            </Link>
+                            <p className="text-sm text-emerald-600 font-bold mt-1">
+                              {item.quantity} × ${item.price.toFixed(2)}
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => removeItem(item.productId)}
+                            aria-label={`Remove ${item.name} from cart`}
+                            className="text-gray-400 hover:text-red-500 shrink-0 mt-1"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      ))}
+                      <div className="flex justify-between items-center pt-2 mb-4">
+                        <span className="font-bold text-gray-800">Total</span>
+                        <span className="font-bold text-emerald-600">${cartTotal.toFixed(2)}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Link
+                          href="/cart"
+                          onClick={() => setIsCartOpen(false)}
+                          className="flex-1 text-center py-2 text-sm font-medium border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                        >
+                          View cart
+                        </Link>
+                        <Link
+                          href="/checkout"
+                          onClick={() => setIsCartOpen(false)}
+                          className="flex-1 text-center py-2 text-sm font-medium bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transition-colors"
+                        >
+                          Checkout
+                        </Link>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Compare */}
-            <Link href="/compare" className="hidden sm:flex flex-col items-center hover:text-emerald-600 transition-colors">
+            <Link href="/compare" className="hidden sm:flex flex-col items-center hover:text-emerald-600 transition-colors relative">
               <ArrowRightLeft size={22} />
               <span className="text-[10px] font-medium mt-0.5">Compare</span>
+              {compareItems.length > 0 && (
+                <span className="absolute -top-1.5 -right-2 bg-emerald-500 text-white text-[10px] rounded-full min-w-[18px] h-[18px] flex items-center justify-center font-bold px-1">
+                  {compareItems.length}
+                </span>
+              )}
             </Link>
           </div>
         </div>
