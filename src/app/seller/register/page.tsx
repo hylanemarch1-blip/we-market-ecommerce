@@ -64,6 +64,36 @@ const INDIAN_STATES = [
   "Delhi", "Jammu and Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
 ];
 
+const FORM_FIELDS = [
+  "fullName",
+  "legalBusinessName",
+  "storeName",
+  "email",
+  "phoneNumber",
+  "password",
+  "confirmPassword",
+  "gstin",
+  "pan",
+  "vendorType",
+  "addressLine1",
+  "addressLine2",
+  "city",
+  "state",
+  "country",
+  "postalCode",
+];
+
+function mapDetailsToFields(details: string[]): Record<string, string> {
+  const mapped: Record<string, string> = {};
+
+  for (const detail of details) {
+    const field = detail.split(" ")[0];
+    if (FORM_FIELDS.includes(field)) mapped[field] = detail;
+  }
+
+  return mapped;
+}
+
 export default function SellerRegister() {
   const router = useRouter();
   const [step, setStep] = useState(1);
@@ -98,6 +128,8 @@ export default function SellerRegister() {
   });
 
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitDetails, setSubmitDetails] = useState<string[]>([]);
 
   const validateStep1 = useCallback(() => {
     const newErrors: Record<string, string> = {};
@@ -212,10 +244,68 @@ export default function SellerRegister() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateStep3()) return;
+
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
-    router.push("/seller/dashboard");
+    setSubmitError(null);
+    setSubmitDetails([]);
+
+    try {
+      const response = await fetch("/api/seller/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: step1.fullName.trim(),
+          fullName: step1.fullName.trim(),
+          email: step1.email.trim(),
+          password: step1.password,
+          confirmPassword: step1.confirmPassword,
+          storeName: step1.legalBusinessName.trim(),
+          legalBusinessName: step1.legalBusinessName.trim(),
+          phoneNumber: step1.phoneNumber.trim(),
+          vendorType: step2.vendorType,
+          gstin: step2.gstin.trim(),
+          pan: step2.pan.trim(),
+          addressLine1: step2.addressLine1.trim(),
+          addressLine2: step2.addressLine2.trim(),
+          city: step2.city.trim(),
+          state: step2.state.trim(),
+          country: step2.country,
+          postalCode: step2.postalCode.trim(),
+        }),
+      });
+
+      if (response.status === 201) {
+        router.push("/seller/dashboard");
+        return;
+      }
+
+      const data = (await response.json().catch(() => ({}))) as {
+        error?: string;
+        details?: unknown;
+      };
+      const details = Array.isArray(data.details)
+        ? data.details.map((detail) => String(detail))
+        : [];
+
+      if (response.status === 400 || response.status === 409) {
+        setSubmitError(
+          data.error ??
+            (response.status === 409
+              ? "An account with this email already exists"
+              : "Please fix the errors below and try again"),
+        );
+        setSubmitDetails(details);
+        setErrors((prev) => ({ ...prev, ...mapDetailsToFields(details) }));
+        return;
+      }
+
+      setSubmitError(data.error ?? "Something went wrong. Please try again.");
+      setSubmitDetails(details);
+    } catch {
+      setSubmitError("We could not reach the server. Check your connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const FileDropzone = ({
@@ -722,6 +812,19 @@ export default function SellerRegister() {
 
           {/* Step Content */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {submitError && (
+              <div role="alert" className="rounded-lg border border-red-300 bg-red-50 p-4">
+                <p className="text-sm font-medium text-red-700">{submitError}</p>
+                {submitDetails.length > 0 && (
+                  <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-red-600">
+                    {submitDetails.map((detail) => (
+                      <li key={detail}>{detail}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+
             {step === 1 && renderStep1()}
             {step === 2 && renderStep2()}
             {step === 3 && renderStep3()}
