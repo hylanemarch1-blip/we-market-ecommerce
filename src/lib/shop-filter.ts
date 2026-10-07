@@ -124,6 +124,7 @@ export const filterProductsInStock = <T extends { stock: number }>(
 export const BRAND_ORIGINS: Record<string, string> = {
   AquaSpin: "China",
   AutoTrim: "China",
+  AyurVeda: "India",
   "Baker's Lane": "India",
   BrickFun: "Denmark",
   CarryCo: "India",
@@ -145,6 +146,7 @@ export const BRAND_ORIGINS: Record<string, string> = {
   GlowLab: "France",
   HarvestRoot: "India",
   HeatWave: "China",
+  "Khadi India": "India",
   IronFlex: "India",
   LittlePage: "India",
   Lumira: "China",

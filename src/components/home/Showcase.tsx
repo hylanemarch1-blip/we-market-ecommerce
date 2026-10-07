@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, ShoppingCart, Star, Zap } from "lucide-react";
 import { getDiscountPercent, type Product } from "@/data/products";
+import { getCategoryDisplayName } from "@/data/categories";
 import { useCart } from "@/context/CartContext";
 import { useFormatPrice } from "@/context/CurrencyContext";
 
@@ -46,7 +47,7 @@ function ShowcaseCard({ product }: { product: Product }) {
 
       <div className="p-3 flex flex-col flex-1">
         <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide truncate">
-          {product.category}
+          {getCategoryDisplayName(product.category)}
         </span>
         <Link
           href={`/products/${product.id}`}

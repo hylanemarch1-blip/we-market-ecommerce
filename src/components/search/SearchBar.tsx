@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
 import { products, getDiscountPercent, type Product } from "@/data/products";
-import { CATEGORIES } from "@/data/categories";
+import { CATEGORIES, getCategoryDisplayName } from "@/data/categories";
 import { categoryMatches, matchesQuery } from "@/lib/shop-filter";
 import { useFormatPrice } from "@/context/CurrencyContext";
 
@@ -269,7 +269,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
                     {highlightText(product.name, query)}
                   </span>
                   <span className="block text-xs text-gray-400 truncate">
-                    {product.category} &middot; {product.brand}
+                    {getCategoryDisplayName(product.category)} &middot; {product.brand}
                   </span>
                 </span>
 

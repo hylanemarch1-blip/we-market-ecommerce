@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Star, MapPin, Package, Truck, ShieldCheck, Users, Store } from "lucide-react";
 import { getVendorById, getVendorProducts } from "@/data/vendors";
+import { getCategoryDisplayName } from "@/data/categories";
 import Price from "@/components/Price";
 
 export default async function VendorDetails({
@@ -176,7 +177,7 @@ export default async function VendorDetails({
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-emerald-600 font-medium mb-1">{product.category}</p>
+                    <p className="text-[11px] text-emerald-600 font-medium mb-1">{getCategoryDisplayName(product.category)}</p>
                     <h3 className="font-medium text-sm text-gray-800 mb-2 leading-snug">{product.name}</h3>
                     <div className="flex items-center justify-between text-[11px] text-gray-500 mb-2">
                       <span className="flex items-center gap-1">

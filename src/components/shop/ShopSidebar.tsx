@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Filter, Search, Star, X } from "lucide-react";
 import { useFormatPrice } from "@/context/CurrencyContext";
 import { products } from "@/data/products";
-import { CATEGORIES } from "@/data/categories";
+import { CATEGORIES, getCategoryBySlug } from "@/data/categories";
 import {
   filterProductsByCategory,
   getProductOrigin,
@@ -33,6 +33,7 @@ export default function ShopSidebar() {
 
   const activeCategory = searchParams.get("category") ?? "";
   const activeSlug = slugifyCategory(activeCategory);
+  const activeSub = searchParams.get("sub") ?? "";
   const saleOnly = searchParams.get("sale") === "true";
 
   const minPrice = parseNumberParam(searchParams.get("minPrice"), 0);
@@ -148,8 +149,12 @@ export default function ShopSidebar() {
                 <Link
                   href={
                     category.slug
-                      ? buildHref({ category: encodeURIComponent(category.slug), sale: null })
-                      : buildHref({ category: null, sale: null })
+                      ? buildHref({
+                          category: encodeURIComponent(category.slug),
+                          sale: null,
+                          sub: null,
+                        })
+                      : buildHref({ category: null, sale: null, sub: null })
                   }
                   scroll={false}
                   className={`text-xs md:text-sm font-medium text-slate-700 hover:text-blue-600 py-1 px-2 rounded-md transition-colors block truncate ${
@@ -161,9 +166,14 @@ export default function ShopSidebar() {
               </li>
             );
           })}
+          <SubcategoryLinks
+            activeSlug={activeSlug}
+            activeSub={activeSub}
+            buildHref={buildHref}
+          />
           <li className="pt-1.5 border-t border-gray-100 mt-1.5">
             <Link
-              href={buildHref({ sale: "true", category: null })}
+              href={buildHref({ sale: "true", category: null, sub: null })}
               scroll={false}
               className={`text-xs md:text-sm font-medium py-1 px-2 rounded-md block truncate transition-colors ${
                 saleOnly
@@ -391,5 +401,49 @@ export default function ShopSidebar() {
         </button>
       )}
     </aside>
+  );
+}
+
+function SubcategoryLinks({
+  activeSlug,
+  activeSub,
+  buildHref,
+}: {
+  activeSlug: string;
+  activeSub: string;
+  buildHref: (updates: Record<string, string | null>) => string;
+}) {
+  const parent = activeSlug ? getCategoryBySlug(activeSlug) : undefined;
+  if (!parent || parent.subcategories.length === 0) return null;
+
+  return (
+    <li className="pt-1.5 border-t border-gray-100 mt-1.5">
+      <p className="px-2 mb-1 text-[10px] font-bold uppercase tracking-wide text-slate-400">
+        Shop {parent.name} by
+      </p>
+      <ul className="space-y-0.5">
+        {parent.subcategories.map((sub) => {
+          const isSubActive = activeSub === sub.slug;
+          return (
+            <li key={sub.slug}>
+              <Link
+                href={buildHref({
+                  category: parent.slug,
+                  sub: sub.slug,
+                  q: null,
+                  sale: null,
+                })}
+                scroll={false}
+                className={`text-xs text-slate-500 hover:text-blue-600 py-1 px-2 pl-4 rounded-md block truncate transition-colors ${
+                  isSubActive ? "text-blue-600 font-semibold bg-blue-50" : ""
+                }`}
+              >
+                {sub.name}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </li>
   );
 }

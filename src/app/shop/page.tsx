@@ -5,7 +5,7 @@ import { Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Star, ShoppingBag, ArrowUpDown, ArrowRightLeft, Tag, X } from "lucide-react";
 import { products, getDiscountPercent } from "@/data/products";
-import { CATEGORIES } from "@/data/categories";
+import { CATEGORIES, getCategoryBySlug, getCategoryDisplayName } from "@/data/categories";
 import {
   filterProductsByBrands,
   filterProductsByCategory,
@@ -49,6 +49,7 @@ function ShopContent() {
   const searchParams = useSearchParams();
   const activeCategory = searchParams.get("category") ?? "";
   const activeSlug = slugifyCategory(activeCategory);
+  const activeSub = searchParams.get("sub") ?? "";
   const activeQuery = searchParams.get("q") ?? "";
   const saleOnly = searchParams.get("sale") === "true";
 
@@ -64,6 +65,10 @@ function ShopContent() {
 
   const { addItem } = useCart();
   const format = useFormatPrice();
+
+  const activeParentCategory = activeSlug ? getCategoryBySlug(activeSlug) : undefined;
+  const activeSubcategory =
+    activeParentCategory?.subcategories.find((sub) => sub.slug === activeSub) ?? null;
   const {
     items: compareItems,
     isFull: compareFull,
@@ -75,6 +80,9 @@ function ShopContent() {
     if (saleOnly) list = list.filter((product) => product.onSale);
     if (activeQuery.trim()) list = filterProductsByQuery(list, activeQuery);
     if (activeCategory) list = filterProductsByCategory(list, activeCategory);
+    if (activeSubcategory?.keyword) {
+      list = filterProductsByQuery(list, activeSubcategory.keyword);
+    }
     if (minPrice !== null || maxPrice !== null) {
       list = filterProductsByPrice(
         list,
@@ -90,6 +98,7 @@ function ShopContent() {
   }, [
     activeCategory,
     activeQuery,
+    activeSubcategory,
     saleOnly,
     minPrice,
     maxPrice,
@@ -113,10 +122,12 @@ function ShopContent() {
     ? "Offer Zone"
     : activeQuery.trim()
       ? `Results for “${activeQuery.trim()}”`
-      : activeSlug
-        ? CATEGORY_FILTERS.find((category) => category.slug === activeSlug)?.label ??
-          "All Products"
-        : "All Products";
+      : activeSubcategory
+        ? activeSubcategory.name
+        : activeSlug
+          ? CATEGORY_FILTERS.find((category) => category.slug === activeSlug)?.label ??
+            "All Products"
+          : "All Products";
 
   return (
     <div className="bg-gray-50 min-h-screen py-8">
@@ -161,6 +172,14 @@ function ShopContent() {
                   <span className="inline-flex items-center gap-1 text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full">
                     <Tag size={12} /> {activeQuery.trim()}
                   </span>
+                )}
+                {activeSubcategory && (
+                  <button
+                    onClick={() => removeParam("sub")}
+                    className="inline-flex items-center gap-1 text-xs font-semibold bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full hover:bg-purple-100"
+                  >
+                    {activeSubcategory.name} <X size={11} />
+                  </button>
                 )}
                 {saleOnly && (
                   <span className="inline-flex items-center gap-1 text-xs font-semibold bg-red-50 text-red-600 px-2.5 py-1 rounded-full">
@@ -288,7 +307,7 @@ function ShopContent() {
                         </button>
                       </div>
                       <div className="p-4 flex flex-col flex-1">
-                        <span className="text-xs text-gray-400 font-medium">{product.category}</span>
+                        <span className="text-xs text-gray-400 font-medium">{getCategoryDisplayName(product.category)}</span>
                         <Link
                           href={`/products/${product.id}`}
                           className="text-sm font-semibold text-gray-800 mt-1 line-clamp-1 hover:text-emerald-600"

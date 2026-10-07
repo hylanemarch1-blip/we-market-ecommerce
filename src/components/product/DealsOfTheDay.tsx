@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Clock, ShoppingBag, Star, Zap } from "lucide-react";
 import { getDealProducts, getDiscountPercent } from "@/data/products";
+import { getCategoryDisplayName } from "@/data/categories";
 import { useCart } from "@/context/CartContext";
 import { useFormatPrice } from "@/context/CurrencyContext";
 
@@ -114,7 +115,7 @@ export default function DealsOfTheDay({ limit = 8 }: { limit?: number }) {
 
               <div className="p-3 md:p-4 flex flex-col flex-1">
                 <span className="text-[11px] text-gray-400 font-medium uppercase tracking-wide">
-                  {product.category}
+                  {getCategoryDisplayName(product.category)}
                 </span>
                 <Link
                   href={`/products/${product.id}`}

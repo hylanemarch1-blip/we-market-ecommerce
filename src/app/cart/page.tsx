@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Minus, Plus, Trash2, ShoppingCart, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { getCategoryDisplayName } from "@/data/categories";
 import { useFormatPrice } from "@/context/CurrencyContext";
 import {
   calculateShipping,
@@ -76,7 +77,7 @@ export default function CartPage() {
                   >
                     {item.name}
                   </Link>
-                  <p className="text-xs text-gray-400 mt-0.5">{item.category}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{getCategoryDisplayName(item.category)}</p>
                   <p className="text-sm font-bold text-emerald-600 mt-1">
                     {format(item.price)}
                   </p>

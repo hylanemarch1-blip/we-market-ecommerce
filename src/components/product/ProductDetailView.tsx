@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import type { Product } from "@/data/products";
 import { getSeller } from "@/data/products";
+import { getCategoryDisplayName } from "@/data/categories";
 import { useCart } from "@/context/CartContext";
 import { useCompare, MAX_COMPARE } from "@/context/CompareContext";
 import { useFormatPrice } from "@/context/CurrencyContext";
@@ -85,7 +86,7 @@ export default function ProductDetailView({
             href={`/shop?category=${slugifyCategory(product.category)}`}
             className="hover:text-emerald-600"
           >
-            {product.category}
+            {getCategoryDisplayName(product.category)}
           </Link>{" "}
           / <span className="text-gray-700">{product.name}</span>
         </p>
@@ -125,7 +126,7 @@ export default function ProductDetailView({
             <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
               <div className="flex items-center justify-between gap-3">
                 <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wide">
-                  {product.category}
+                  {getCategoryDisplayName(product.category)}
                 </span>
                 <span className="text-xs text-gray-400">SKU: {product.sku}</span>
               </div>
@@ -328,7 +329,7 @@ export default function ProductDetailView({
                 Similar Products
               </h2>
               <span className="text-sm text-gray-500 flex items-center gap-1">
-                <Package size={15} /> in {product.category}
+                <Package size={15} /> in {getCategoryDisplayName(product.category)}
               </span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -349,7 +350,7 @@ export default function ProductDetailView({
                   </Link>
                   <div className="p-4 flex flex-col flex-1">
                     <span className="text-xs text-gray-400 font-medium">
-                      {item.category}
+                        {getCategoryDisplayName(item.category)}
                     </span>
                     <Link
                       href={`/products/${item.id}`}

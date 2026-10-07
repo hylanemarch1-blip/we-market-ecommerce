@@ -4,6 +4,7 @@ import ProductGrid from "@/components/product/ProductGrid";
 import CategoryImageGallery from "@/components/product/CategoryImageGallery";
 import DealsOfTheDay from "@/components/product/DealsOfTheDay";
 import HomeShowcases from "@/components/home/HomeShowcases";
+import CategoryPills from "@/components/home/CategoryPills";
 
 export default function Home() {
   return (
@@ -15,6 +16,11 @@ export default function Home() {
       <section className="mt-4">
         <AutoHeroBanner />
       </section>
+
+      {/* Category pills bar */}
+      <div className="max-w-[1440px] mx-auto px-4">
+        <CategoryPills />
+      </div>
 
       {/* Deals of the Day / Huge Discounts */}
       <div className="max-w-[1440px] mx-auto px-4">

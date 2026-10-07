@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag, Star } from "lucide-react";
 import { products, getDiscountPercent } from "@/data/products";
+import { getCategoryDisplayName } from "@/data/categories";
 import { useCart } from "@/context/CartContext";
 import { useFormatPrice } from "@/context/CurrencyContext";
 
@@ -57,7 +58,7 @@ export default function ProductGrid() {
 
               <div className="p-3 md:p-4 flex flex-col flex-1">
                 <span className="text-[11px] text-emerald-600 font-semibold uppercase tracking-wide">
-                  {product.category}
+                  {getCategoryDisplayName(product.category)}
                 </span>
                 <Link
                   href={`/products/${product.id}`}

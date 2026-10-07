@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Star, Truck, ShieldCheck, MapPin, Package, Heart } from "lucide-react";
 import { getVendorBySlug, getVendorProducts } from "@/data/vendors";
+import { getCategoryDisplayName } from "@/data/categories";
 import Price from "@/components/Price";
 
 export default async function Storefront({
@@ -180,7 +181,7 @@ export default async function Storefront({
                       )}
                     </div>
                     <div className="p-3">
-                      <p className="text-[11px] text-emerald-600 font-medium mb-1">{product.category}</p>
+                      <p className="text-[11px] text-emerald-600 font-medium mb-1">{getCategoryDisplayName(product.category)}</p>
                       <div className="flex justify-between items-start gap-2 mb-2">
                         <h4 className="font-medium text-sm text-gray-800 leading-snug">{product.name}</h4>
                         <div className="text-right shrink-0">
