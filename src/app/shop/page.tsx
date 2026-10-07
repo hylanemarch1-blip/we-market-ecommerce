@@ -2,15 +2,23 @@
 
 import Link from "next/link";
 import { Suspense, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
-import { Star, ShoppingBag, Filter, ArrowUpDown, ArrowRightLeft, Tag } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Star, ShoppingBag, ArrowUpDown, ArrowRightLeft, Tag, X } from "lucide-react";
 import { products, getDiscountPercent } from "@/data/products";
 import { CATEGORIES } from "@/data/categories";
 import {
+  filterProductsByBrands,
   filterProductsByCategory,
+  filterProductsByMinRating,
+  filterProductsByOrigin,
+  filterProductsByPrice,
   filterProductsByQuery,
+  filterProductsInStock,
+  parseListParam,
+  parseNumberParam,
   slugifyCategory,
 } from "@/lib/shop-filter";
+import ShopSidebar from "@/components/shop/ShopSidebar";
 import { useCart } from "@/context/CartContext";
 import { useCompare } from "@/context/CompareContext";
 
@@ -36,11 +44,23 @@ export default function ShopPage() {
 }
 
 function ShopContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const activeCategory = searchParams.get("category") ?? "";
   const activeSlug = slugifyCategory(activeCategory);
   const activeQuery = searchParams.get("q") ?? "";
   const saleOnly = searchParams.get("sale") === "true";
+
+  const minPriceParam = searchParams.get("minPrice");
+  const maxPriceParam = searchParams.get("maxPrice");
+  const minPrice = minPriceParam ? parseNumberParam(minPriceParam, 0) : null;
+  const maxPrice = maxPriceParam ? parseNumberParam(maxPriceParam, Infinity) : null;
+  const activeBrands = parseListParam(searchParams.get("brand"));
+  const activeOrigins = parseListParam(searchParams.get("origin"));
+  const minRatingParam = searchParams.get("minRating");
+  const minRating = minRatingParam ? parseNumberParam(minRatingParam, 0) : null;
+  const inStockOnly = searchParams.get("inStock") === "true";
+
   const { addItem } = useCart();
   const {
     items: compareItems,
@@ -53,8 +73,39 @@ function ShopContent() {
     if (saleOnly) list = list.filter((product) => product.onSale);
     if (activeQuery.trim()) list = filterProductsByQuery(list, activeQuery);
     if (activeCategory) list = filterProductsByCategory(list, activeCategory);
+    if (minPrice !== null || maxPrice !== null) {
+      list = filterProductsByPrice(
+        list,
+        minPrice,
+        maxPrice === Infinity ? null : maxPrice
+      );
+    }
+    if (activeBrands.length > 0) list = filterProductsByBrands(list, activeBrands);
+    if (minRating) list = filterProductsByMinRating(list, minRating);
+    if (inStockOnly) list = filterProductsInStock(list, true);
+    if (activeOrigins.length > 0) list = filterProductsByOrigin(list, activeOrigins);
     return list;
-  }, [activeCategory, activeQuery, saleOnly]);
+  }, [
+    activeCategory,
+    activeQuery,
+    saleOnly,
+    minPrice,
+    maxPrice,
+    activeBrands,
+    minRating,
+    inStockOnly,
+    activeOrigins,
+  ]);
+
+  const setParam = (key: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === null || value === "") params.delete(key);
+    else params.set(key, value);
+    const query = params.toString();
+    router.replace(query ? `/shop?${query}` : "/shop", { scroll: false });
+  };
+
+  const removeParam = (key: string) => setParam(key, null);
 
   const pageTitle = saleOnly
     ? "Offer Zone"
@@ -93,65 +144,12 @@ function ShopContent() {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar Filters */}
-          <aside className="w-full lg:w-64 space-y-6">
-            <div className="bg-white p-5 rounded-xl border border-gray-200">
-              <div className="flex items-center gap-2 font-bold text-gray-800 mb-4">
-                <Filter size={18} />
-                <span>Categories</span>
-              </div>
-              <ul className="space-y-2 text-sm text-gray-600">
-                {CATEGORY_FILTERS.map((category) => {
-                  const isActive = !saleOnly && category.slug === activeSlug;
-                  return (
-                    <li key={category.label}>
-                      <Link
-                        href={
-                          category.slug
-                            ? `/shop?category=${encodeURIComponent(category.slug)}`
-                            : "/shop"
-                        }
-                        scroll={false}
-                        className={`block cursor-pointer hover:text-emerald-600 transition ${
-                          isActive
-                            ? "text-emerald-600 font-semibold"
-                            : "font-medium"
-                        }`}
-                      >
-                        {category.label}
-                      </Link>
-                    </li>
-                  );
-                })}
-                <li className="pt-2 border-t border-gray-100 mt-3">
-                  <Link
-                    href="/shop?sale=true"
-                    scroll={false}
-                    className={`block cursor-pointer transition ${
-                      saleOnly
-                        ? "text-orange-500 font-semibold"
-                        : "text-orange-500 font-medium hover:text-orange-600"
-                    }`}
-                  >
-                    Offer Zone (Up to 60% OFF)
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl border border-gray-200">
-              <h3 className="font-bold text-gray-800 text-sm mb-3">Price Range</h3>
-              <input type="range" min="0" max="300" className="w-full accent-emerald-600" />
-              <div className="flex justify-between text-xs text-gray-500 mt-2">
-                <span>$0</span>
-                <span>$300</span>
-              </div>
-            </div>
-          </aside>
+          <ShopSidebar />
 
           {/* Product Grid */}
-          <main className="flex-1">
+          <main className="flex-1 min-w-0">
             <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl border border-gray-200">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="text-sm text-gray-500">
@@ -167,6 +165,66 @@ function ShopContent() {
                     <Tag size={12} /> On Sale
                   </span>
                 )}
+                {minPrice !== null && (
+                  <button
+                    onClick={() => removeParam("minPrice")}
+                    className="inline-flex items-center gap-1 text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full hover:bg-blue-100"
+                  >
+                    Min ${minPrice} <X size={11} />
+                  </button>
+                )}
+                {maxPrice !== null && maxPrice !== Infinity && (
+                  <button
+                    onClick={() => removeParam("maxPrice")}
+                    className="inline-flex items-center gap-1 text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full hover:bg-blue-100"
+                  >
+                    Max ${maxPrice} <X size={11} />
+                  </button>
+                )}
+                {activeBrands.map((brand) => (
+                  <button
+                    key={`brand-${brand}`}
+                    onClick={() =>
+                      setParam(
+                        "brand",
+                        activeBrands.filter((entry) => entry !== brand).join(",") || null
+                      )
+                    }
+                    className="inline-flex items-center gap-1 text-xs font-semibold bg-gray-100 text-gray-700 px-2.5 py-1 rounded-full hover:bg-gray-200"
+                  >
+                    {brand} <X size={11} />
+                  </button>
+                ))}
+                {minRating !== null && minRating > 0 && (
+                  <button
+                    onClick={() => removeParam("minRating")}
+                    className="inline-flex items-center gap-1 text-xs font-semibold bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full hover:bg-amber-100"
+                  >
+                    {minRating} Stars &amp; up <X size={11} />
+                  </button>
+                )}
+                {inStockOnly && (
+                  <button
+                    onClick={() => removeParam("inStock")}
+                    className="inline-flex items-center gap-1 text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full hover:bg-emerald-100"
+                  >
+                    In Stock Only <X size={11} />
+                  </button>
+                )}
+                {activeOrigins.map((origin) => (
+                  <button
+                    key={`origin-${origin}`}
+                    onClick={() =>
+                      setParam(
+                        "origin",
+                        activeOrigins.filter((entry) => entry !== origin).join(",") || null
+                      )
+                    }
+                    className="inline-flex items-center gap-1 text-xs font-semibold bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full hover:bg-purple-100"
+                  >
+                    {origin} <X size={11} />
+                  </button>
+                ))}
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <ArrowUpDown size={16} />
