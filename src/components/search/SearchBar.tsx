@@ -32,7 +32,7 @@ function highlightText(text: string, query: string): ReactNode {
   const regex = new RegExp(`(${tokens.map(escapeRegExp).join("|")})`, "ig");
   return text.split(regex).map((part, index) =>
     index % 2 === 1 ? (
-      <strong key={index} className="text-emerald-700 font-semibold">
+      <strong key={index} className="text-blue-700 font-semibold">
         {part}
       </strong>
     ) : (
@@ -169,11 +169,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
     >
       <form
         onSubmit={handleFormSubmit}
-        className={`flex items-center overflow-hidden bg-white ${
-          isDesktop
-            ? "border-2 border-emerald-500 rounded-md"
-            : "border border-gray-300 rounded-md"
-        }`}
+        className="flex items-center overflow-hidden bg-white border border-slate-300 rounded-md"
         role="search"
       >
         {isDesktop && (
@@ -185,7 +181,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
                 setActiveIndex(-1);
               }}
               aria-label="Search within category"
-              className="appearance-none bg-gray-50 text-xs text-gray-600 font-medium px-4 py-3 pr-8 cursor-pointer focus:outline-none max-w-[150px]"
+              className="appearance-none bg-slate-50 text-xs text-gray-600 font-medium px-4 py-3 pr-8 cursor-pointer focus:outline-none max-w-[150px]"
             >
               <option value="">All categories</option>
               {CATEGORIES.map((category) => (
@@ -223,7 +219,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
         <button
           type="submit"
           aria-label="Search"
-          className={`bg-emerald-500 hover:bg-emerald-600 text-white transition-colors shrink-0 ${
+          className={`bg-blue-600 hover:bg-blue-700 text-white transition-colors shrink-0 ${
             isDesktop ? "px-5 py-3" : "px-4 py-2"
           }`}
         >
@@ -253,7 +249,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
                 onClick={() => goToProduct(product)}
                 onMouseEnter={() => setActiveIndex(index)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gray-50 last:border-b-0 transition-colors ${
-                  index === activeIndex ? "bg-emerald-50" : "bg-white"
+                  index === activeIndex ? "bg-blue-50" : "bg-white"
                 }`}
               >
                 <span className="relative w-11 h-11 shrink-0 bg-gray-50 rounded overflow-hidden">
@@ -276,7 +272,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
                 </span>
 
                 <span className="shrink-0 text-right">
-                  <span className="block text-sm font-bold text-emerald-600">
+                  <span className="block text-sm font-bold text-gray-900">
                     ${product.price.toFixed(2)}
                   </span>
                   <span className="block text-xs text-gray-400 line-through">
@@ -296,7 +292,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
             type="button"
             onClick={() => submitSearch()}
             onMouseEnter={() => setActiveIndex(-1)}
-            className="w-full flex items-center gap-2 px-4 py-3 text-sm font-semibold text-emerald-700 bg-emerald-50/60 hover:bg-emerald-50 border-t border-gray-100 text-left"
+            className="w-full flex items-center gap-2 px-4 py-3 text-sm font-semibold text-blue-700 bg-blue-50/60 hover:bg-blue-50 border-t border-gray-100 text-left"
           >
             <Search size={15} />
             See all results for &ldquo;{query.trim()}&rdquo;

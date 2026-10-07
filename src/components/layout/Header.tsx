@@ -151,7 +151,7 @@ export default function Header() {
 
       {/* Main Header */}
       <header className="sticky top-0 z-40 bg-white shadow-sm">
-        <div className="max-w-[1440px] mx-auto px-4 py-4 flex items-center gap-4 lg:gap-6">
+        <div className="max-w-[1440px] mx-auto px-4 py-3 flex items-center gap-4 lg:gap-6">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -317,17 +317,17 @@ export default function Header() {
         </div>
 
         {/* Desktop Navigation Bar */}
-        <div className="border-t border-gray-100 hidden lg:block bg-white">
-          <div className="max-w-[1440px] mx-auto px-4 flex items-center justify-between">
+        <div className="border-b border-gray-200 hidden lg:block bg-white">
+          <div className="max-w-[1440px] mx-auto px-4 h-11 flex items-center justify-between">
             <div className="flex items-center">
               {/* Browse Categories Button */}
               <button
                 onClick={() => setIsSidebarOpen(true)}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-5 py-3 flex items-center gap-2 transition-colors shrink-0"
+                className="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-3 py-1.5 mr-2 flex items-center gap-2 rounded-md transition-colors shrink-0"
               >
-                <Grid size={16} />
+                <Grid size={15} />
                 Browse All Categories
-                <ChevronDown size={14} />
+                <ChevronDown size={13} />
               </button>
 
               {/* Navigation Links */}
@@ -341,10 +341,10 @@ export default function Header() {
                   >
                     <Link
                       href={item.href}
-                      className={`flex items-center gap-1 px-4 py-3 text-sm font-bold transition-colors ${
+                      className={`flex items-center gap-1 px-3 py-1.5 text-sm font-semibold transition-colors ${
                         item.label === "Offer Zone"
                           ? "text-orange-500 hover:text-orange-600"
-                          : "text-gray-700 hover:text-emerald-600"
+                          : "text-gray-600 hover:text-emerald-600"
                       }`}
                     >
                       {item.label}

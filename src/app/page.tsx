@@ -1,9 +1,9 @@
 import FestivalSaleCarousel from "@/components/hero/FestivalSaleCarousel";
 import AutoHeroBanner from "@/components/hero/AutoHeroBanner";
-import AtoZCatalog from "@/components/product/AtoZCatalog";
 import ProductGrid from "@/components/product/ProductGrid";
 import CategoryImageGallery from "@/components/product/CategoryImageGallery";
 import DealsOfTheDay from "@/components/product/DealsOfTheDay";
+import HomeShowcases from "@/components/home/HomeShowcases";
 
 export default function Home() {
   return (
@@ -21,29 +21,9 @@ export default function Home() {
         <DealsOfTheDay />
       </div>
 
-      {/* Featured Categories - Electronics */}
+      {/* Multi-category showcases */}
       <div className="max-w-[1440px] mx-auto px-4">
-        <CategoryImageGallery
-          category="electronics"
-          title="Top Electronics"
-          subtitle="Explore the latest gadgets and tech"
-          columns={4}
-        />
-      </div>
-
-      {/* A-to-Z Category Directory */}
-      <div className="max-w-[1440px] mx-auto px-4">
-        <AtoZCatalog />
-      </div>
-
-      {/* Featured Categories - Fashion */}
-      <div className="max-w-[1440px] mx-auto px-4">
-        <CategoryImageGallery
-          category="fashion"
-          title="Trending Fashion"
-          subtitle="Stay stylish with our curated collection"
-          columns={4}
-        />
+        <HomeShowcases />
       </div>
 
       {/* Product Grid */}
