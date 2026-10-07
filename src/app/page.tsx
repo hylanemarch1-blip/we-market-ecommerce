@@ -1,15 +1,25 @@
+import FestivalSaleCarousel from "@/components/hero/FestivalSaleCarousel";
 import AutoHeroBanner from "@/components/hero/AutoHeroBanner";
 import AtoZCatalog from "@/components/product/AtoZCatalog";
 import ProductGrid from "@/components/product/ProductGrid";
 import CategoryImageGallery from "@/components/product/CategoryImageGallery";
+import DealsOfTheDay from "@/components/product/DealsOfTheDay";
 
 export default function Home() {
   return (
     <div className="w-full">
+      {/* Festival Flash Sale Carousel */}
+      <FestivalSaleCarousel />
+
       {/* Hero Section */}
-      <section>
+      <section className="mt-4">
         <AutoHeroBanner />
       </section>
+
+      {/* Deals of the Day / Huge Discounts */}
+      <div className="max-w-[1440px] mx-auto px-4">
+        <DealsOfTheDay />
+      </div>
 
       {/* Featured Categories - Electronics */}
       <div className="max-w-[1440px] mx-auto px-4">

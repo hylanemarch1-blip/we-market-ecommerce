@@ -35,7 +35,7 @@ const slides: Slide[] = [
     title: "Premium Headphones",
     subtitle: "Immersive sound for music lovers",
     ctaText: "Shop Now",
-    ctaHref: "/shop?category=headphones",
+    ctaHref: "/shop?q=headphones",
   },
   {
     id: 4,
@@ -43,7 +43,7 @@ const slides: Slide[] = [
     title: "Powerful Laptops",
     subtitle: "Performance machines for work and play",
     ctaText: "Discover",
-    ctaHref: "/shop?category=laptops",
+    ctaHref: "/shop?q=laptop",
   },
   {
     id: 5,
@@ -51,7 +51,7 @@ const slides: Slide[] = [
     title: "Smartwatches Collection",
     subtitle: "Track your fitness, own your style",
     ctaText: "Shop Smartwatches",
-    ctaHref: "/shop?category=smartwatches",
+    ctaHref: "/shop?q=smartwatches",
   },
 ];
 

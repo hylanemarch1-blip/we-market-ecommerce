@@ -3,106 +3,41 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
-  Search, Heart, ShoppingCart, User, Menu, X, ChevronDown,
+  Heart, ShoppingCart, User, Menu, X, ChevronDown,
   Headphones, Grid, ShoppingBag, ArrowRightLeft, Trash2,
-  Smartphone, Monitor, Watch, HeadphonesIcon, Gamepad2, Cpu, Speaker
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useCompare } from "@/context/CompareContext";
+import { CATEGORIES } from "@/data/categories";
+import SearchBar from "@/components/search/SearchBar";
 
-const NAV_ITEMS = [
+interface NavItem {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "Home", href: "/" },
+  { label: "Offer Zone", href: "/shop?sale=true" },
   {
-    label: "Home",
-    href: "/",
-    children: [
-      { label: "Homepage 1", href: "/" },
-      { label: "Homepage 2", href: "/home-2" },
-      { label: "Homepage 3", href: "/home-3" },
-      { label: "Homepage 4", href: "/home-4" },
-      { label: "Homepage 5", href: "/home-5" },
-    ],
-  },
-  {
-    label: "Shop",
+    label: "Categories",
     href: "/shop",
-    children: [
-      { label: "Shop Grid", href: "/shop" },
-      { label: "Shop Grid 2", href: "/shop/grid-2" },
-      { label: "Shop List - Left Sidebar", href: "/shop/list" },
-      { label: "Shop List - Right Sidebar", href: "/shop/list-2" },
-      { label: "Shop Fullwidth", href: "/shop/fullwidth" },
-      { label: "Single Product", href: "/products/1" },
-      { label: "Single Product 2", href: "/products/2" },
-      { label: "Shop Cart", href: "/cart" },
-      { label: "Shop Checkout", href: "/checkout" },
-      { label: "Shop Compare", href: "/compare" },
-      { label: "Shop Wishlist", href: "/wishlist" },
-    ],
+    children: CATEGORIES.map((category) => ({
+      label: category.label,
+      href: `/shop?category=${category.slug}`,
+    })),
   },
-  {
-    label: "Vendors",
-    href: "/vendor",
-    children: [
-      { label: "Vendors Listing", href: "/vendor" },
-      { label: "Vendor Center / Dashboard", href: "/seller/dashboard" },
-    ],
-  },
-  {
-    label: "Pages",
-    href: "#",
-    children: [
-      { label: "About Us", href: "/about" },
-      { label: "Contact Us", href: "/contact" },
-      { label: "Careers", href: "/careers" },
-      { label: "Terms and Conditions", href: "/terms" },
-      { label: "Register", href: "/register" },
-      { label: "Login", href: "/login" },
-      { label: "Error 404", href: "/404" },
-    ],
-  },
-  {
-    label: "Blog",
-    href: "/blog",
-    children: [
-      { label: "Blog Grid", href: "/blog" },
-      { label: "Blog Grid 2", href: "/blog/grid-2" },
-      { label: "Blog List", href: "/blog/list" },
-      { label: "Blog Big", href: "/blog/big" },
-      { label: "Blog Single", href: "/blog/1" },
-    ],
-  },
+  { label: "Orders", href: "/account/orders" },
   { label: "Contact", href: "/contact" },
 ];
 
-const CATEGORIES_SEARCH = [
-  "All categories",
-  "Fashion & Apparel",
-  "Mobiles & Tablets",
-  "Electronics & Tech",
-  "Home & Kitchen",
-  "Appliances",
-  "Beauty & Personal Care",
-  "Grocery & Food",
-  "Toys, Baby & Kids",
-  "Home Improvement & Tools",
-  "Sports, Fitness & Outdoors",
-  "Auto Accessories",
-  "Books & Stationery",
-];
-
-const CATEGORIES_SIDEBAR = [
-  { label: "Fashion & Apparel", href: "/shop?category=fashion" },
-  { label: "Mobiles & Tablets", href: "/shop?category=mobiles" },
-  { label: "Electronics & Tech", href: "/shop?category=electronics" },
-  { label: "Home & Kitchen", href: "/shop?category=home-kitchen" },
-  { label: "Appliances", href: "/shop?category=appliances" },
-  { label: "Beauty & Personal Care", href: "/shop?category=beauty" },
-  { label: "Grocery & Food", href: "/shop?category=grocery" },
-  { label: "Toys, Baby & Kids", href: "/shop?category=toys" },
-  { label: "Home Improvement & Tools", href: "/shop?category=home-improvement" },
-  { label: "Sports, Fitness & Outdoors", href: "/shop?category=sports" },
-  { label: "Auto Accessories", href: "/shop?category=auto" },
-  { label: "Books & Stationery", href: "/shop?category=books" },
+const TOP_BAR_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Offer Zone", href: "/shop?sale=true" },
+  { label: "Categories", href: "/shop" },
+  { label: "Orders", href: "/account/orders" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const LANGUAGES = [
@@ -115,22 +50,6 @@ const LANGUAGES = [
 
 const CURRENCIES = ["USD", "EUR", "AUD", "SGP"];
 
-function BluetoothIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m6.5 6.5 11 11L12 23V1l5.5 5.5-11 11" />
-    </svg>
-  );
-}
-
-function CloudIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
-    </svg>
-  );
-}
-
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
@@ -138,7 +57,6 @@ export default function Header() {
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeSubNav, setActiveSubNav] = useState<string | null>(null);
-  const [openSidebarCategory, setOpenSidebarCategory] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const { items: cartItems, count: cartCount, subtotal: cartTotal, removeItem } = useCart();
@@ -166,9 +84,20 @@ export default function Header() {
       <div className="bg-white border-b border-gray-100 text-xs hidden lg:block">
         <div className="max-w-[1440px] mx-auto px-4 flex items-center justify-between h-10">
           <ul className="flex gap-5 text-gray-500">
-            <li><Link href="/about" className="hover:text-emerald-600 transition-colors">About Us</Link></li>
-            <li><Link href="/careers" className="hover:text-emerald-600 transition-colors">Careers</Link></li>
-            <li><Link href="/vendor" className="hover:text-emerald-600 transition-colors font-medium text-emerald-600">Open a shop</Link></li>
+            {TOP_BAR_LINKS.map((link) => (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  className={`hover:text-emerald-600 transition-colors ${
+                    link.label === "Offer Zone"
+                      ? "font-semibold text-orange-500 hover:text-orange-600"
+                      : ""
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
 
           <div className="text-center">
@@ -237,24 +166,7 @@ export default function Header() {
           </Link>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-[600px] hidden lg:flex items-center border-2 border-emerald-500 rounded-md overflow-hidden">
-            <div className="relative border-r border-gray-200">
-              <select className="appearance-none bg-gray-50 text-xs text-gray-600 font-medium px-4 py-3 pr-8 cursor-pointer focus:outline-none">
-                {CATEGORIES_SEARCH.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-              <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search for items..."
-              className="w-full px-4 py-3 text-sm text-gray-700 focus:outline-none"
-            />
-            <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3 transition-colors shrink-0">
-              <Search size={18} />
-            </button>
-          </div>
+          <SearchBar />
 
           {/* Action Icons */}
           <div className="flex items-center gap-3 lg:gap-5 text-gray-700 shrink-0">
@@ -430,8 +342,8 @@ export default function Header() {
                     <Link
                       href={item.href}
                       className={`flex items-center gap-1 px-4 py-3 text-sm font-bold transition-colors ${
-                        item.label === "Home"
-                          ? "text-emerald-600"
+                        item.label === "Offer Zone"
+                          ? "text-orange-500 hover:text-orange-600"
                           : "text-gray-700 hover:text-emerald-600"
                       }`}
                     >
@@ -441,7 +353,9 @@ export default function Header() {
 
                     {item.children && activeSubNav === item.label && (
                       <ul className={`absolute top-full left-0 bg-white border border-gray-200 rounded-b-lg shadow-lg py-2 z-50 min-w-[200px] ${
-                        item.label === "Shop" ? "grid grid-cols-2 min-w-[440px]" : ""
+                        item.label === "Categories"
+                          ? "grid grid-cols-2 min-w-[440px]"
+                          : ""
                       }`}>
                         {item.children.map((child) => (
                           <li key={child.label}>
@@ -486,25 +400,26 @@ export default function Header() {
             </div>
 
             <div className="py-2">
-              {CATEGORIES_SIDEBAR.map((cat) => {
-                const isOpen = openSidebarCategory === cat.label;
-                return (
-                  <div key={cat.label} className="border-b border-gray-100 last:border-0">
-                    <Link
-                      href={cat.href}
-                      onClick={() => setIsSidebarOpen(false)}
-                      className="w-full flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-left"
-                    >
-                      {cat.label}
-                    </Link>
-                    {isOpen && (
-                      <ul className="bg-gray-50 px-5 py-2">
-                        <li key="divider" className="border-b border-gray-200 h-px my-2" />
-                      </ul>
-                    )}
-                  </div>
-                );
-              })}
+              {CATEGORIES.map((category) => (
+                <div key={category.slug} className="border-b border-gray-100 last:border-0">
+                  <Link
+                    href={`/shop?category=${category.slug}`}
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="w-full flex items-center justify-between gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-left"
+                  >
+                    {category.label}
+                    <ChevronDown size={14} className="-rotate-90 text-gray-300" />
+                  </Link>
+                </div>
+              ))}
+              <Link
+                href="/shop?sale=true"
+                onClick={() => setIsSidebarOpen(false)}
+                className="w-full flex items-center justify-between gap-3 px-5 py-3 text-sm font-bold text-orange-500 hover:bg-orange-50 transition-colors text-left"
+              >
+                Offer Zone
+                <ChevronDown size={14} className="-rotate-90 text-orange-300" />
+              </Link>
             </div>
           </div>
           <div className="flex-1 bg-black/50 backdrop-blur-sm" onClick={() => setIsSidebarOpen(false)} />
@@ -530,16 +445,7 @@ export default function Header() {
 
             {/* Mobile Search */}
             <div className="p-4 border-b border-gray-100">
-              <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                <input
-                  type="text"
-                  placeholder="Search for items..."
-                  className="w-full px-3 py-2 text-sm text-gray-700 focus:outline-none"
-                />
-                <button className="bg-emerald-500 text-white px-4 py-2">
-                  <Search size={16} />
-                </button>
-              </div>
+              <SearchBar variant="mobile" />
             </div>
 
             {/* Mobile Nav */}

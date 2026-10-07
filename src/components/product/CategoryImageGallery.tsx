@@ -52,6 +52,49 @@ const CATEGORY_IMAGES: Record<string, CategoryCard[]> = {
   ],
 };
 
+const GROUP_SLUGS: Record<string, string> = {
+  electronics: "electronics",
+  fashion: "fashion",
+  home_kitchen: "home-kitchen",
+  beauty: "beauty",
+  sports: "sports",
+};
+
+const ITEM_SLUG_OVERRIDES: Record<string, string> = {
+  smartphones: "mobiles",
+  tablets: "mobiles",
+  laptops: "electronics",
+  headphones: "electronics",
+  smartwatches: "electronics",
+  cameras: "electronics",
+  gaming: "electronics",
+  speakers: "electronics",
+  "mens-clothing": "fashion",
+  "womens-clothing": "fashion",
+  footwear: "fashion",
+  watches: "fashion",
+  bags: "fashion",
+  jewelry: "fashion",
+  furniture: "home-kitchen",
+  cookware: "home-kitchen",
+  "home-decor": "home-kitchen",
+  lighting: "home-kitchen",
+  bedding: "home-kitchen",
+  storage: "home-kitchen",
+  skincare: "beauty",
+  makeup: "beauty",
+  fragrances: "beauty",
+  "hair-care": "beauty",
+  "bath-body": "beauty",
+  "tools-brushes": "beauty",
+  fitness: "sports",
+  running: "sports",
+  yoga: "sports",
+  outdoor: "sports",
+  "team-sports": "sports",
+  cycling: "sports",
+};
+
 export default function CategoryImageGallery({
   category,
   title,
@@ -81,7 +124,7 @@ export default function CategoryImageGallery({
           {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
         </div>
         <Link
-          href={`/shop?category=${category}`}
+          href={`/shop?category=${GROUP_SLUGS[category] ?? category}`}
           className="text-sm font-medium text-emerald-600 hover:underline"
         >
           View All
@@ -91,7 +134,9 @@ export default function CategoryImageGallery({
         {items.map((item) => (
           <Link
             key={item.slug}
-            href={`/shop?category=${item.slug}`}
+            href={`/shop?category=${
+              ITEM_SLUG_OVERRIDES[item.slug] ?? GROUP_SLUGS[category] ?? category
+            }`}
             className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="aspect-[4/3] overflow-hidden bg-gray-100">

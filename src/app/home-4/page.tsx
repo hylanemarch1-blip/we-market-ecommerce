@@ -11,7 +11,7 @@ export default function Home4() {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
             <a
-              href="/shop?category=smartphones"
+              href="/shop?category=mobiles"
               className="relative rounded-xl overflow-hidden h-[188px] group"
             >
               <img
@@ -27,7 +27,7 @@ export default function Home4() {
               </div>
             </a>
             <a
-              href="/shop?category=laptops"
+              href="/shop?q=laptop"
               className="relative rounded-xl overflow-hidden h-[188px] group"
             >
               <img

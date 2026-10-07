@@ -14,13 +14,19 @@ export default function Home5() {
             <p className="text-sm text-gray-500">Choose your necessary products from these featured categories.</p>
           </div>
           <div className="flex gap-3 mt-3 sm:mt-0">
-            {["Electronics", "Fashion", "Home", "Beauty", "Sports"].map((cat) => (
+            {[
+              { label: "Electronics", slug: "electronics" },
+              { label: "Fashion", slug: "fashion" },
+              { label: "Home", slug: "home-kitchen" },
+              { label: "Beauty", slug: "beauty" },
+              { label: "Sports", slug: "sports" },
+            ].map((cat) => (
               <a
-                key={cat}
-                href={`/shop?category=${cat.toLowerCase()}`}
+                key={cat.label}
+                href={`/shop?category=${cat.slug}`}
                 className="text-xs font-medium text-gray-500 hover:text-emerald-600 border border-gray-200 rounded-full px-4 py-1.5 hover:border-emerald-300 transition-colors"
               >
-                {cat}
+                {cat.label}
               </a>
             ))}
           </div>
