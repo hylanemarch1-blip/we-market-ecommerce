@@ -3,6 +3,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Package, MapPin, ArrowRight } from "lucide-react";
+import { useFormatPrice } from "@/context/CurrencyContext";
 import {
   getOrdersSnapshot,
   getServerOrdersSnapshot,
@@ -20,6 +21,7 @@ const STATUS_STYLES: Record<Order["status"], string> = {
 };
 
 export default function AccountOrdersPage() {
+  const format = useFormatPrice();
   const orders = useSyncExternalStore(
     subscribeOrders,
     getOrdersSnapshot,
@@ -93,7 +95,7 @@ export default function AccountOrdersPage() {
                         Total
                       </p>
                       <p className="text-sm font-bold text-emerald-600">
-                        ${order.total.toFixed(2)}
+                        {format(order.total)}
                       </p>
                     </div>
                   </div>
@@ -131,11 +133,11 @@ export default function AccountOrdersPage() {
                             {item.name}
                           </Link>
                           <p className="text-xs text-gray-400">
-                            ${item.price.toFixed(2)} × {item.quantity}
+                            {format(item.price)} × {item.quantity}
                           </p>
                         </div>
                         <p className="text-sm font-semibold text-gray-800">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          {format(item.price * item.quantity)}
                         </p>
                       </li>
                     ))}
@@ -158,19 +160,19 @@ export default function AccountOrdersPage() {
                       <p>
                         Subtotal:{" "}
                         <span className="font-semibold text-gray-700">
-                          ${order.subtotal.toFixed(2)}
+                          {format(order.subtotal)}
                         </span>
                       </p>
                       <p>
                         Shipping:{" "}
                         <span className="font-semibold text-gray-700">
-                          {order.shipping === 0 ? "FREE" : `$${order.shipping.toFixed(2)}`}
+                          {order.shipping === 0 ? "FREE" : format(order.shipping)}
                         </span>
                       </p>
                       <p className="text-sm">
                         Total:{" "}
                         <span className="font-bold text-emerald-600">
-                          ${order.total.toFixed(2)}
+                          {format(order.total)}
                         </span>
                       </p>
                     </div>

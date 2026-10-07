@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Star, Truck, ShieldCheck, MapPin, Package, Heart } from "lucide-react";
 import { getVendorBySlug, getVendorProducts } from "@/data/vendors";
+import Price from "@/components/Price";
 
 export default async function Storefront({
   params,
@@ -185,11 +186,11 @@ export default async function Storefront({
                         <div className="text-right shrink-0">
                           {product.salePrice ? (
                             <>
-                              <p className="text-emerald-600 font-bold">${product.salePrice.toFixed(2)}</p>
-                              <p className="text-[11px] text-gray-400 line-through">${product.price.toFixed(2)}</p>
+                              <p className="text-emerald-600 font-bold"><Price amount={product.salePrice} /></p>
+                              <p className="text-[11px] text-gray-400 line-through"><Price amount={product.price} /></p>
                             </>
                           ) : (
-                            <p className="text-emerald-600 font-bold">${product.price.toFixed(2)}</p>
+                            <p className="text-emerald-600 font-bold"><Price amount={product.price} /></p>
                           )}
                         </div>
                       </div>

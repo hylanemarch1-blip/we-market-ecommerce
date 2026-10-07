@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Star, MapPin, Package, Truck, ShieldCheck, Users, Store } from "lucide-react";
 import { getVendorById, getVendorProducts } from "@/data/vendors";
+import Price from "@/components/Price";
 
 export default async function VendorDetails({
   params,
@@ -189,11 +190,11 @@ export default async function VendorDetails({
                     <div className="mt-auto flex items-center justify-between">
                       {product.salePrice ? (
                         <div>
-                          <p className="text-emerald-600 font-bold">${product.salePrice.toFixed(2)}</p>
-                          <p className="text-[11px] text-gray-400 line-through">${product.price.toFixed(2)}</p>
+                          <p className="text-emerald-600 font-bold"><Price amount={product.salePrice} /></p>
+                          <p className="text-[11px] text-gray-400 line-through"><Price amount={product.price} /></p>
                         </div>
                       ) : (
-                        <p className="text-emerald-600 font-bold">${product.price.toFixed(2)}</p>
+                        <p className="text-emerald-600 font-bold"><Price amount={product.price} /></p>
                       )}
                       <button
                         disabled={product.stock === 0}

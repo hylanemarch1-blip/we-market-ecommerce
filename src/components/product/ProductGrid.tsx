@@ -5,9 +5,11 @@ import Link from "next/link";
 import { ShoppingBag, Star } from "lucide-react";
 import { products, getDiscountPercent } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { useFormatPrice } from "@/context/CurrencyContext";
 
 export default function ProductGrid() {
   const { addItem } = useCart();
+  const format = useFormatPrice();
 
   const featured = [...products]
     .sort((a, b) => b.rating - a.rating)
@@ -72,10 +74,10 @@ export default function ProductGrid() {
                 <div className="mt-auto pt-3 flex items-center justify-between gap-2">
                   <div className="min-w-0">
                     <span className="text-base md:text-lg font-bold text-gray-900">
-                      ${product.price.toFixed(2)}
+                      {format(product.price)}
                     </span>
                     <span className="block text-[11px] text-gray-400 line-through">
-                      ${product.originalPrice.toFixed(2)}
+                      {format(product.originalPrice)}
                     </span>
                   </div>
                   <button

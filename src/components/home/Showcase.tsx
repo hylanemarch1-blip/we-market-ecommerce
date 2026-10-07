@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, ShoppingCart, Star, Zap } from "lucide-react";
 import { getDiscountPercent, type Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { useFormatPrice } from "@/context/CurrencyContext";
 
 export interface ShowcaseGroup {
   label: string;
@@ -16,6 +17,7 @@ export interface ShowcaseGroup {
 function ShowcaseCard({ product }: { product: Product }) {
   const router = useRouter();
   const { addItem } = useCart();
+  const format = useFormatPrice();
   const discount = getDiscountPercent(product);
 
   const buyNow = () => {
@@ -60,11 +62,11 @@ function ShowcaseCard({ product }: { product: Product }) {
 
         <div className="flex items-baseline gap-2 mt-1.5">
           <span className="text-base font-bold text-gray-900">
-            ${product.price.toFixed(2)}
+            {format(product.price)}
           </span>
           {discount > 0 && (
             <span className="text-xs text-gray-400 line-through">
-              ${product.originalPrice.toFixed(2)}
+              {format(product.originalPrice)}
             </span>
           )}
         </div>

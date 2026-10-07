@@ -21,6 +21,7 @@ import type { Product } from "@/data/products";
 import { getSeller } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { useCompare, MAX_COMPARE } from "@/context/CompareContext";
+import { useFormatPrice } from "@/context/CurrencyContext";
 import { slugifyCategory } from "@/lib/shop-filter";
 import { FREE_SHIPPING_THRESHOLD } from "@/lib/checkout";
 
@@ -36,6 +37,7 @@ export default function ProductDetailView({
   const router = useRouter();
   const { addItem } = useCart();
   const { items: compareItems, isFull: compareFull, toggleCompare } = useCompare();
+  const format = useFormatPrice();
 
   const [imageIndex, setImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -146,12 +148,12 @@ export default function ProductDetailView({
 
               <div className="flex items-end gap-3">
                 <span className="text-3xl font-bold text-emerald-600">
-                  ${product.price.toFixed(2)}
+                  {format(product.price)}
                 </span>
                 {product.originalPrice > product.price && (
                   <>
                     <span className="text-lg text-gray-400 line-through mb-0.5">
-                      ${product.originalPrice.toFixed(2)}
+                      {format(product.originalPrice)}
                     </span>
                     <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mb-1">
                       -{discount}%
@@ -362,10 +364,10 @@ export default function ProductDetailView({
                     <div className="mt-auto pt-4 flex items-center justify-between">
                       <div>
                         <span className="text-base font-bold text-emerald-600">
-                          ${item.price.toFixed(2)}
+                          {format(item.price)}
                         </span>
                         <span className="text-xs text-gray-400 line-through ml-2">
-                          ${item.originalPrice.toFixed(2)}
+                          {format(item.originalPrice)}
                         </span>
                       </div>
                       <button

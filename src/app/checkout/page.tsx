@@ -13,6 +13,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useFormatPrice } from "@/context/CurrencyContext";
 import {
   calculateShipping,
   FREE_SHIPPING_THRESHOLD,
@@ -42,6 +43,7 @@ const EMPTY_ADDRESS: ShippingAddress = {
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, updateQuantity, removeItem, clearCart } = useCart();
+  const format = useFormatPrice();
 
   const [address, setAddress] = useState<ShippingAddress>(EMPTY_ADDRESS);
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<AddressField, string>>>({});
@@ -236,7 +238,7 @@ export default function CheckoutPage() {
                         {item.name}
                       </p>
                       <p className="text-xs text-gray-400 mt-0.5">
-                        ${item.price.toFixed(2)} each
+                        {format(item.price)} each
                       </p>
                       <div className="flex items-center gap-2 mt-1">
                         <div className="flex items-center border border-gray-300 rounded-md">
@@ -268,7 +270,7 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                     <p className="text-sm font-bold text-gray-800 shrink-0">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {format(item.price * item.quantity)}
                     </p>
                   </div>
                 ))}
@@ -278,7 +280,7 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
                   <span className="font-semibold text-gray-800">
-                    ${subtotal.toFixed(2)}
+                    {format(subtotal)}
                   </span>
                 </div>
                 <div className="flex justify-between text-gray-600">
@@ -287,18 +289,18 @@ export default function CheckoutPage() {
                     {shipping > 0 && (
                       <span className="text-xs text-gray-400">
                         {" "}
-                        (free over ${FREE_SHIPPING_THRESHOLD})
+                        (free over {format(FREE_SHIPPING_THRESHOLD, 0)})
                       </span>
                     )}
                   </span>
                   <span className="font-semibold text-gray-800">
-                    {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? "FREE" : format(shipping)}
                   </span>
                 </div>
                 <div className="border-t border-gray-100 pt-2.5 flex justify-between">
                   <span className="font-bold text-gray-800">Grand Total</span>
                   <span className="font-bold text-emerald-600 text-base">
-                    ${total.toFixed(2)}
+                    {format(total)}
                   </span>
                 </div>
               </div>
@@ -324,7 +326,7 @@ export default function CheckoutPage() {
                   </>
                 ) : (
                   <>
-                    Place Order — ${total.toFixed(2)}
+                    Place Order — {format(total)}
                   </>
                 )}
               </button>

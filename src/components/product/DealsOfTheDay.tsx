@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Clock, ShoppingBag, Star, Zap } from "lucide-react";
 import { getDealProducts, getDiscountPercent } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { useFormatPrice } from "@/context/CurrencyContext";
 
 function getTimeLeft(): { hours: string; minutes: string; seconds: string } {
   const now = new Date();
@@ -23,6 +24,7 @@ function getTimeLeft(): { hours: string; minutes: string; seconds: string } {
 
 export default function DealsOfTheDay({ limit = 8 }: { limit?: number }) {
   const { addItem } = useCart();
+  const format = useFormatPrice();
   const [timeLeft, setTimeLeft] = useState<{
     hours: string;
     minutes: string;
@@ -132,10 +134,10 @@ export default function DealsOfTheDay({ limit = 8 }: { limit?: number }) {
                 <div className="mt-auto pt-3">
                   <div className="flex items-baseline gap-2 flex-wrap">
                     <span className="text-lg font-black text-gray-900">
-                      ${product.price.toFixed(2)}
+                      {format(product.price)}
                     </span>
                     <span className="text-xs text-gray-400 line-through">
-                      ${product.originalPrice.toFixed(2)}
+                      {format(product.originalPrice)}
                     </span>
                   </div>
 

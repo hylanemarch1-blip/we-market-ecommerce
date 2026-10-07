@@ -5,6 +5,7 @@ import { Star, X } from "lucide-react";
 import type { ReactNode } from "react";
 import type { Product } from "@/data/products";
 import { getSeller } from "@/data/products";
+import { useFormatPrice } from "@/context/CurrencyContext";
 
 interface ComparisonTableProps {
   products: Product[];
@@ -15,6 +16,7 @@ export default function ComparisonTable({
   products,
   onRemove,
 }: ComparisonTableProps) {
+  const format = useFormatPrice();
   const specKeys = products.reduce<string[]>((keys, product) => {
     Object.keys(product.specifications).forEach((key) => {
       if (!keys.includes(key)) keys.push(key);
@@ -27,10 +29,10 @@ export default function ComparisonTable({
       label: "Price",
       render: (product) => (
         <span>
-          <span className="font-bold text-emerald-600">${product.price.toFixed(2)}</span>
+          <span className="font-bold text-emerald-600">{format(product.price)}</span>
           {product.originalPrice > product.price && (
             <span className="block text-xs text-gray-400 line-through">
-              ${product.originalPrice.toFixed(2)}
+              {format(product.originalPrice)}
             </span>
           )}
         </span>

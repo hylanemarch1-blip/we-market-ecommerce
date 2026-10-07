@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Minus, Plus, Trash2, ShoppingCart, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useFormatPrice } from "@/context/CurrencyContext";
 import {
   calculateShipping,
   FREE_SHIPPING_THRESHOLD,
@@ -11,6 +12,7 @@ import {
 
 export default function CartPage() {
   const { items, subtotal, updateQuantity, removeItem } = useCart();
+  const format = useFormatPrice();
 
   const shipping = calculateShipping(subtotal);
   const total = subtotal + shipping;
@@ -76,7 +78,7 @@ export default function CartPage() {
                   </Link>
                   <p className="text-xs text-gray-400 mt-0.5">{item.category}</p>
                   <p className="text-sm font-bold text-emerald-600 mt-1">
-                    ${item.price.toFixed(2)}
+                    {format(item.price)}
                   </p>
                 </div>
                 <div className="flex items-center border border-gray-300 rounded-lg shrink-0">
@@ -101,7 +103,7 @@ export default function CartPage() {
                 </div>
                 <div className="text-right shrink-0 w-24">
                   <p className="text-sm font-bold text-gray-800">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    {format(item.price * item.quantity)}
                   </p>
                 </div>
                 <button
@@ -123,28 +125,28 @@ export default function CartPage() {
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
                   <span className="font-semibold text-gray-800">
-                    ${subtotal.toFixed(2)}
+                    {format(subtotal)}
                   </span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Shipping</span>
                   <span className="font-semibold text-gray-800">
-                    {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? "FREE" : format(shipping)}
                   </span>
                 </div>
                 <div className="border-t border-gray-100 pt-3 flex justify-between">
                   <span className="font-bold text-gray-800">Total</span>
                   <span className="font-bold text-emerald-600 text-base">
-                    ${total.toFixed(2)}
+                    {format(total)}
                   </span>
                 </div>
               </div>
 
               {amountToFreeShipping > 0 && (
                 <p className="text-xs text-gray-500 mt-4 bg-emerald-50 text-emerald-700 rounded-lg p-3">
-                  Add <strong>${amountToFreeShipping.toFixed(2)}</strong> more to
-                  get free shipping (orders over ${FREE_SHIPPING_THRESHOLD} ship
-                  free, otherwise ${SHIPPING_FEE.toFixed(2)}).
+                  Add <strong>{format(amountToFreeShipping)}</strong> more to
+                  get free shipping (orders over {format(FREE_SHIPPING_THRESHOLD, 0)} ship
+                  free, otherwise {format(SHIPPING_FEE)}).
                 </p>
               )}
 

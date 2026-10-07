@@ -8,7 +8,10 @@ import {
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useCompare } from "@/context/CompareContext";
+import { useCurrency } from "@/context/CurrencyContext";
+import { CURRENCY_CODES, CURRENCY_LABELS, type CurrencyCode } from "@/utils/currency";
 import { CATEGORIES } from "@/data/categories";
+import { FREE_SHIPPING_THRESHOLD } from "@/lib/checkout";
 import SearchBar from "@/components/search/SearchBar";
 
 interface NavItem {
@@ -48,7 +51,7 @@ const LANGUAGES = [
   { code: "cn", label: "中国人", flag: "🇨🇳" },
 ];
 
-const CURRENCIES = ["USD", "EUR", "AUD", "SGP"];
+const CURRENCIES = CURRENCY_CODES;
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -61,6 +64,7 @@ export default function Header() {
 
   const { items: cartItems, count: cartCount, subtotal: cartTotal, removeItem } = useCart();
   const { items: compareItems } = useCompare();
+  const { currency, setCurrency, format } = useCurrency();
 
   const langRef = useRef<HTMLDivElement>(null);
   const currencyRef = useRef<HTMLDivElement>(null);
@@ -102,7 +106,7 @@ export default function Header() {
 
           <div className="text-center">
             <span className="text-gray-500">Free shipping for all orders over </span>
-            <span className="font-bold text-emerald-600">$75.00</span>
+            <span className="font-bold text-emerald-600">{format(FREE_SHIPPING_THRESHOLD)}</span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -133,13 +137,24 @@ export default function Header() {
                 onClick={() => { setIsCurrencyOpen(!isCurrencyOpen); setIsLangOpen(false); }}
                 className="flex items-center gap-1 text-gray-500 hover:text-emerald-600 transition-colors"
               >
-                USD <ChevronDown size={12} />
+                {CURRENCY_LABELS[currency]} <ChevronDown size={12} />
               </button>
               {isCurrencyOpen && (
-                <ul className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 min-w-[100px]">
+                <ul className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 min-w-[140px]">
                   {CURRENCIES.map((cur) => (
                     <li key={cur}>
-                      <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600">{cur}</button>
+                      <button
+                        onClick={() => {
+                          setCurrency(cur as CurrencyCode);
+                          setIsCurrencyOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-emerald-50 hover:text-emerald-600 flex items-center justify-between gap-2 ${
+                          cur === currency ? "text-emerald-600 font-semibold" : "text-gray-700"
+                        }`}
+                      >
+                        {CURRENCY_LABELS[cur]}
+                        {cur === currency && <span aria-hidden="true">&#10003;</span>}
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -265,7 +280,7 @@ export default function Header() {
                               {item.name}
                             </Link>
                             <p className="text-sm text-emerald-600 font-bold mt-1">
-                              {item.quantity} × ${item.price.toFixed(2)}
+                              {item.quantity} &times; {format(item.price)}
                             </p>
                           </div>
                           <button
@@ -279,7 +294,7 @@ export default function Header() {
                       ))}
                       <div className="flex justify-between items-center pt-2 mb-4">
                         <span className="font-bold text-gray-800">Total</span>
-                        <span className="font-bold text-emerald-600">${cartTotal.toFixed(2)}</span>
+                        <span className="font-bold text-emerald-600">{format(cartTotal)}</span>
                       </div>
                       <div className="flex gap-2">
                         <Link

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Filter, Search, Star, X } from "lucide-react";
+import { useFormatPrice } from "@/context/CurrencyContext";
 import { products } from "@/data/products";
 import { CATEGORIES } from "@/data/categories";
 import {
@@ -26,6 +27,7 @@ const toPercent = (value: number) => (value / PRICE_MAX) * 100;
 export default function ShopSidebar() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const format = useFormatPrice();
   const [brandQuery, setBrandQuery] = useState("");
   const [originQuery, setOriginQuery] = useState("");
 
@@ -194,10 +196,10 @@ export default function ShopSidebar() {
         </div>
 
         <div className="flex items-center justify-between text-xs text-slate-600 mb-2">
-          <span className="bg-slate-100 rounded px-1.5 py-0.5">${draftMin}</span>
+          <span className="bg-slate-100 rounded px-1.5 py-0.5">{format(draftMin, 0)}</span>
           <span className="text-slate-400">to</span>
           <span className="bg-slate-100 rounded px-1.5 py-0.5">
-            ${draftMax}
+            {format(draftMax, 0)}
             {draftMax >= PRICE_MAX ? "+" : ""}
           </span>
         </div>
@@ -238,8 +240,8 @@ export default function ShopSidebar() {
         </div>
 
         <div className="flex justify-between text-[11px] text-slate-500 mt-1.5">
-          <span>$0</span>
-          <span>${PRICE_MAX}</span>
+          <span>{format(0, 0)}</span>
+          <span>{format(PRICE_MAX, 0)}</span>
         </div>
       </div>
 

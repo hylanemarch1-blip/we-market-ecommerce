@@ -15,6 +15,7 @@ import { ChevronDown, Search } from "lucide-react";
 import { products, getDiscountPercent, type Product } from "@/data/products";
 import { CATEGORIES } from "@/data/categories";
 import { categoryMatches, matchesQuery } from "@/lib/shop-filter";
+import { useFormatPrice } from "@/context/CurrencyContext";
 
 const MAX_SUGGESTIONS = 8;
 
@@ -47,6 +48,7 @@ interface SearchBarProps {
 
 export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
   const router = useRouter();
+  const format = useFormatPrice();
   const [query, setQuery] = useState("");
   const [scope, setScope] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -273,10 +275,10 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
 
                 <span className="shrink-0 text-right">
                   <span className="block text-sm font-bold text-gray-900">
-                    ${product.price.toFixed(2)}
+                    {format(product.price)}
                   </span>
                   <span className="block text-xs text-gray-400 line-through">
-                    ${product.originalPrice.toFixed(2)}
+                      {format(product.originalPrice)}
                   </span>
                   {discount > 0 && (
                     <span className="block text-[11px] font-bold text-red-500">

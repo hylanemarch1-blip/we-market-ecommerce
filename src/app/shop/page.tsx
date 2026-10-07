@@ -21,6 +21,7 @@ import {
 import ShopSidebar from "@/components/shop/ShopSidebar";
 import { useCart } from "@/context/CartContext";
 import { useCompare } from "@/context/CompareContext";
+import { useFormatPrice } from "@/context/CurrencyContext";
 
 const CATEGORY_FILTERS = [
   { label: "All Categories", slug: "" },
@@ -62,6 +63,7 @@ function ShopContent() {
   const inStockOnly = searchParams.get("inStock") === "true";
 
   const { addItem } = useCart();
+  const format = useFormatPrice();
   const {
     items: compareItems,
     isFull: compareFull,
@@ -170,7 +172,7 @@ function ShopContent() {
                     onClick={() => removeParam("minPrice")}
                     className="inline-flex items-center gap-1 text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full hover:bg-blue-100"
                   >
-                    Min ${minPrice} <X size={11} />
+                    Min {format(minPrice, 0)} <X size={11} />
                   </button>
                 )}
                 {maxPrice !== null && maxPrice !== Infinity && (
@@ -178,7 +180,7 @@ function ShopContent() {
                     onClick={() => removeParam("maxPrice")}
                     className="inline-flex items-center gap-1 text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full hover:bg-blue-100"
                   >
-                    Max ${maxPrice} <X size={11} />
+                    Max {format(maxPrice, 0)} <X size={11} />
                   </button>
                 )}
                 {activeBrands.map((brand) => (
@@ -300,10 +302,10 @@ function ShopContent() {
                         <div className="mt-auto pt-4 flex items-center justify-between">
                           <div>
                             <span className="text-base font-bold text-emerald-600">
-                              ${product.price.toFixed(2)}
+                              {format(product.price)}
                             </span>
                             <span className="text-xs text-gray-400 line-through ml-2">
-                              ${product.originalPrice.toFixed(2)}
+                              {format(product.originalPrice)}
                             </span>
                           </div>
                           <button
