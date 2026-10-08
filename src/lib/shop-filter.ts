@@ -18,7 +18,10 @@ export const categoryMatches = (
 
   const productTokens = productSlug.split("-");
   const selectedTokens = selectedSlug.split("-");
-  return productTokens.some((token) => selectedTokens.includes(token));
+  // A short canonical slug (e.g. "toys") should still match a longer product
+  // label slug (e.g. "toys-kids"), but a longer canonical slug must not match
+  // a shorter/unrelated product slug (e.g. "canned-food" vs "food-grains-staples").
+  return selectedTokens.every((token) => productTokens.includes(token));
 };
 
 export const filterProductsByCategory = <T extends { category: string }>(
@@ -169,6 +172,56 @@ export const BRAND_ORIGINS: Record<string, string> = {
   VisionMax: "China",
   WoodCraft: "India",
   ZenFlow: "India",
+  HarvestCan: "USA",
+  OceanCatch: "Thailand",
+  ElSol: "Mexico",
+  "Funghi Fresh": "Italy",
+  "Truffle & Co": "Italy",
+  "Wild Forest": "Italy",
+  NutraFox: "India",
+  "Assam Leaf": "India",
+  "Darjeeling Estate": "India",
+  "Kyoto Leaf": "Japan",
+  "Calm Bloom": "Egypt",
+  RiceCraft: "India",
+  "Chakki Mill": "India",
+  "Organic Roots": "India",
+  OatWell: "USA",
+  "Farm Basket": "India",
+  "Prime Cuts": "India",
+  "Smoke & Cure": "India",
+  "Morning Coop": "India",
+  "River Catch": "India",
+  "Bay Gold": "India",
+  "Blue Lagoon": "India",
+  "Nordic Pure": "Norway",
+  "Grandma's Jar": "India",
+  "Punjab Achar Co": "India",
+  "Andhra Achar Co": "India",
+  Nazakat: "India",
+  Zariya: "India",
+  Denimora: "USA",
+  "Bloom & Vine": "USA",
+  "Milano Step": "Italy",
+  "Kolhapur Craft": "India",
+  NordStride: "Germany",
+  Aurelle: "France",
+  ShadeHaus: "USA",
+  LuxeCarry: "USA",
+  DermGlow: "South Korea",
+  ColorForge: "USA",
+  VelvetTint: "France",
+  "Indigo Loom": "Japan",
+  "Pique Club": "USA",
+  "Oxford Lane": "United Kingdom",
+  Sartoria: "Italy",
+  AeroHide: "USA",
+  "Court Classic": "USA",
+  "Brogue & Co": "United Kingdom",
+  ChronoCraft: "Switzerland",
+  CarbonSlim: "Japan",
+  BeardRoots: "Morocco",
+  ClayLab: "United Kingdom",
 };
 
 const normalizeOrigin = (value: string): string => {

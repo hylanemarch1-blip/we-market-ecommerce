@@ -1,23 +1,36 @@
 import Link from "next/link";
 import {
   BookOpen,
+  Can,
   Car,
+  Carrot,
   ChefHat,
+  Coffee,
+  CookingPot,
+  Drumstick,
   Dumbbell,
+  Fish,
+  Gem,
   Heart,
   Laptop,
+  PersonStanding,
+  Popcorn,
   Puzzle,
   Refrigerator,
   Shirt,
   ShoppingBasket,
   Smartphone,
   Sparkles,
+  Sprout,
+  Wheat,
   type LucideIcon,
 } from "lucide-react";
 import { CATEGORIES } from "@/data/categories";
 
 const ICONS: Record<string, LucideIcon> = {
   fashion: Shirt,
+  "women-fashion": Gem,
+  "men-fashion": PersonStanding,
   mobiles: Smartphone,
   electronics: Laptop,
   "home-kitchen": ChefHat,
@@ -29,6 +42,15 @@ const ICONS: Record<string, LucideIcon> = {
   auto: Car,
   books: BookOpen,
   "desi-bazaar": Sparkles,
+  "canned-food": Can,
+  "mushrooms-truffles": Sprout,
+  makhana: Popcorn,
+  "tea-tisanes": Coffee,
+  "food-grains-staples": Wheat,
+  "fresh-vegetables": Carrot,
+  "poultry-meats": Drumstick,
+  "fish-seafood": Fish,
+  "pickles-chutneys": CookingPot,
 };
 
 export default function CategoryPills() {
@@ -46,7 +68,7 @@ export default function CategoryPills() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2 md:gap-3">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-3">
         {CATEGORIES.map((category) => {
           const Icon = ICONS[category.slug] ?? Sparkles;
           return (

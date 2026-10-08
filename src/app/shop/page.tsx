@@ -80,8 +80,12 @@ function ShopContent() {
     if (saleOnly) list = list.filter((product) => product.onSale);
     if (activeQuery.trim()) list = filterProductsByQuery(list, activeQuery);
     if (activeCategory) list = filterProductsByCategory(list, activeCategory);
-    if (activeSubcategory?.keyword) {
-      list = filterProductsByQuery(list, activeSubcategory.keyword);
+    if (activeSubcategory) {
+      const bySub = list.filter((p) => p.subcategory === activeSubcategory.slug);
+      if (bySub.length > 0) list = bySub;
+      else if (activeSubcategory.keyword)
+        list = filterProductsByQuery(list, activeSubcategory.keyword);
+      else list = [];
     }
     if (minPrice !== null || maxPrice !== null) {
       list = filterProductsByPrice(
