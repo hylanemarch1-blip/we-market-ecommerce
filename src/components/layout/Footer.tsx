@@ -25,6 +25,13 @@ const FOOTER_COLUMNS = [
     ],
   },
   {
+    title: "Vendor & Supplier",
+    links: [
+      { label: "Vendor Registration", href: "/vendor/register" },
+      { label: "Manufacturer Association", href: "/vendor/register" },
+    ],
+  },
+  {
     title: "My Account",
     links: [
       { label: "FAQs", href: "/faq" },
@@ -136,7 +143,7 @@ export default function Footer() {
 
       {/* Main Footer Links */}
       <div className="max-w-[1440px] mx-auto px-4 py-12 lg:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-6">
           {/* Contact Column */}
           <div>
             <h4 className="text-base font-bold text-gray-900 mb-6">Contact</h4>

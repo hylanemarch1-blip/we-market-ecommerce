@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   Heart, ShoppingCart, User, Menu, X, ChevronDown,
-  Headphones, Grid, ShoppingBag, ArrowRightLeft, Trash2,
+  Headphones, Grid, ShoppingBag, ArrowRightLeft, Trash2, Store,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useCompare } from "@/context/CompareContext";
@@ -79,9 +79,19 @@ export default function Header() {
       {/* Top Utility Bar */}
       <div className="bg-white border-b border-gray-100 text-xs hidden lg:block">
         <div className="max-w-[1440px] mx-auto px-4 flex items-center justify-between h-10">
-          <div className="text-center">
-            <span className="text-gray-500">Free shipping for all orders over </span>
-            <span className="font-bold text-emerald-600">{format(FREE_SHIPPING_THRESHOLD)}</span>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/vendor/register"
+              className="font-semibold text-emerald-600 hover:text-emerald-700 transition flex items-center gap-1.5"
+            >
+              <Store size={13} />
+              Become a Seller
+            </Link>
+
+            <div className="text-center">
+              <span className="text-gray-500">Free shipping for all orders over </span>
+              <span className="font-bold text-emerald-600">{format(FREE_SHIPPING_THRESHOLD)}</span>
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
@@ -177,6 +187,7 @@ export default function Header() {
                     { label: "My Orders", href: "/account/orders" },
                     { label: "My Wishlist", href: "/wishlist" },
                     { label: "Setting", href: "/account/settings" },
+                    { label: "Vendor Portal / Become a Seller", href: "/vendor/register" },
                     { label: "Sign out", href: "/logout" },
                   ].map((item) => (
                     <li key={item.label}>
@@ -359,6 +370,12 @@ export default function Header() {
                     )}
                   </div>
                 ))}
+                <Link
+                  href="/vendor/register"
+                  className="font-semibold text-amber-600 hover:text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200"
+                >
+                  Sell on WE-Market
+                </Link>
               </nav>
             </div>
 
@@ -469,6 +486,7 @@ export default function Header() {
                 { label: "My Orders", href: "/account/orders" },
                 { label: "My Wishlist", href: "/wishlist" },
                 { label: "Setting", href: "/account/settings" },
+                { label: "Vendor Portal / Become a Seller", href: "/vendor/register" },
                 { label: "Sign out", href: "/logout" },
               ].map((item) => (
                 <Link
