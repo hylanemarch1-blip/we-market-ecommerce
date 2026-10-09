@@ -46,7 +46,7 @@ export default function DealsOfTheDay({ limit = 8 }: { limit?: number }) {
   if (deals.length === 0) return null;
 
   return (
-    <section className="py-8" aria-label="Deals of the day">
+    <section className="py-6" aria-label="Deals of the day">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1.5 bg-red-600 text-white text-xs font-black tracking-wide uppercase px-3 py-1.5 rounded-md">
@@ -96,7 +96,7 @@ export default function DealsOfTheDay({ limit = 8 }: { limit?: number }) {
               key={product.id}
               className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow flex flex-col"
             >
-              <div className="relative h-40 md:h-48 bg-gray-100 overflow-hidden">
+              <div className="relative aspect-square bg-gray-50 overflow-hidden">
                 <Link href={`/products/${product.id}`} className="block w-full h-full">
                   <Image
                     src={product.images[0]}

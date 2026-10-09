@@ -79,7 +79,7 @@ export default function FestivalSaleCarousel() {
 
   return (
     <section
-      className="max-w-[1440px] mx-auto px-4 pt-4"
+      className="max-w-[1440px] mx-auto px-4"
       aria-label="Festival sale banner carousel"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}

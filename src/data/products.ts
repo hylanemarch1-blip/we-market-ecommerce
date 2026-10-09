@@ -19,10 +19,12 @@ export interface Product {
   specifications: Record<string, string>;
   sellerId: string;
   onSale?: boolean;
+  /** Ships from outside the country — disables Cash on Delivery at checkout. */
+  isInternational?: boolean;
 }
 
-const img = (id: string, w = 800, h = 800) =>
-  `https://images.unsplash.com/${id}?w=${w}&h=${h}&auto=format&fit=crop&q=70`;
+const img = (id: string, w = 1200, h = 1200) =>
+  `https://images.unsplash.com/${id}?w=${w}&h=${h}&auto=format&fit=crop&q=85`;
 
 const ex = (path: string) => `https://live.staticflickr.com/${path}`;
 
@@ -3073,6 +3075,7 @@ export const products: Product[] = [
     onSale: true,
     brand: "Truffle & Co",
     sku: "TC-OIL-100",
+    isInternational: true,
     price: 18.99,
     originalPrice: 24.99,
     rating: 4.8,
@@ -3345,6 +3348,7 @@ export const products: Product[] = [
     onSale: true,
     brand: "Kyoto Leaf",
     sku: "KL-MATCHA-50",
+    isInternational: true,
     price: 19.99,
     originalPrice: 24.99,
     rating: 4.8,
@@ -4292,6 +4296,7 @@ export const products: Product[] = [
     onSale: true,
     brand: "Milano Step",
     sku: "MS-STIL-85",
+    isInternational: true,
     price: 49.99,
     originalPrice: 69.99,
     rating: 4.6,

@@ -183,7 +183,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
                 setActiveIndex(-1);
               }}
               aria-label="Search within category"
-              className="appearance-none bg-slate-50 text-xs text-gray-600 font-medium px-4 py-3 pr-8 cursor-pointer focus:outline-none max-w-[150px]"
+              className="appearance-none bg-slate-50 text-xs text-gray-600 font-medium px-4 py-2 pr-8 cursor-pointer focus:outline-none max-w-[150px]"
             >
               <option value="">All categories</option>
               {CATEGORIES.map((category) => (
@@ -214,7 +214,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
           aria-autocomplete="list"
           autoComplete="off"
           className={`w-full ${
-            isDesktop ? "px-4 py-3" : "px-3 py-2"
+            isDesktop ? "px-4 py-2" : "px-3 py-2"
           } text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none`}
         />
 
@@ -222,7 +222,7 @@ export default function SearchBar({ variant = "desktop" }: SearchBarProps) {
           type="submit"
           aria-label="Search"
           className={`bg-blue-600 hover:bg-blue-700 text-white transition-colors shrink-0 ${
-            isDesktop ? "px-5 py-3" : "px-4 py-2"
+            isDesktop ? "px-5 py-2.5" : "px-4 py-2"
           }`}
         >
           <Search size={isDesktop ? 18 : 16} />

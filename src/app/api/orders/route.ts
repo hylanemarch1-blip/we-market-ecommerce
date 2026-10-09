@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
 import { getProductById } from "@/data/products";
 import { calculateShipping } from "@/lib/checkout";
-import type { Order, OrderItem, ShippingAddress } from "@/lib/orders";
+import type { Order, OrderItem, PaymentMethod, ShippingAddress } from "@/lib/orders";
 
 interface CreateOrderPayload {
   items?: unknown;
   shippingAddress?: unknown;
+  paymentMethod?: unknown;
 }
+
+const PAYMENT_METHODS: PaymentMethod[] = ["CARD", "STRIPE", "RAZORPAY", "ONLINE", "COD"];
 
 function readAddress(raw: unknown): Record<string, string> {
   const source =
@@ -20,6 +23,7 @@ function readAddress(raw: unknown): Record<string, string> {
     state: pick("state"),
     postalCode: pick("postalCode"),
     phone: pick("phone"),
+    country: pick("country"),
   };
 }
 
@@ -98,7 +102,37 @@ export async function POST(request: Request) {
       state: address.state,
       postalCode: address.postalCode,
       phone: address.phone,
+      country: address.country || "India",
     };
+
+    const rawMethod = body.paymentMethod;
+    let paymentMethod: PaymentMethod = "CARD";
+    if (typeof rawMethod === "string" && rawMethod) {
+      if (!PAYMENT_METHODS.includes(rawMethod as PaymentMethod)) {
+        return NextResponse.json(
+          { error: "Invalid payment method" },
+          { status: 400 }
+        );
+      }
+      paymentMethod = rawMethod as PaymentMethod;
+    }
+
+    // Cash on Delivery is domestic-only: block for non-India addresses or
+    // international (imported) items.
+    if (paymentMethod === "COD") {
+      const hasInternationalItem = items.some(
+        (item) => getProductById(item.productId)?.isInternational === true
+      );
+      if (shippingAddress.country !== "India" || hasInternationalItem) {
+        return NextResponse.json(
+          {
+            error:
+              "COD is not available for international orders or overseas shipping. Please choose a prepaid payment method.",
+          },
+          { status: 400 }
+        );
+      }
+    }
 
     const subtotal = items.reduce(
       (sum, item) => sum + item.price * item.quantity,
@@ -114,6 +148,7 @@ export async function POST(request: Request) {
       status: "PENDING",
       items,
       shippingAddress,
+      paymentMethod,
       subtotal: Number(subtotal.toFixed(2)),
       shipping: Number(shipping.toFixed(2)),
       total: Number(total.toFixed(2)),

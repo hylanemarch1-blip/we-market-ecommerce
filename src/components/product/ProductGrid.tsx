@@ -17,7 +17,7 @@ export default function ProductGrid() {
     .slice(0, 8);
 
   return (
-    <div className="py-6">
+    <div className="py-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Featured Products</h2>
         <Link
@@ -36,7 +36,7 @@ export default function ProductGrid() {
               key={product.id}
               className="group border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white flex flex-col"
             >
-              <div className="relative h-40 md:h-48 bg-gray-100 overflow-hidden">
+              <div className="relative aspect-square bg-gray-50 overflow-hidden">
                 <Link
                   href={`/products/${product.id}`}
                   className="block w-full h-full"

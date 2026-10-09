@@ -55,7 +55,7 @@ const ICONS: Record<string, LucideIcon> = {
 
 export default function CategoryPills() {
   return (
-    <section className="py-6">
+    <section className="py-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg md:text-xl font-bold text-gray-800">
           Shop by Category

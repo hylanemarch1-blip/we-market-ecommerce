@@ -137,7 +137,7 @@ export function ProductShowcase({
   if (products.length === 0) return null;
 
   return (
-    <section className="py-6">
+    <section className="py-4">
       <ShowcaseHeader title={title} subtitle={subtitle} href={href} />
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
         {products.map((product) => (
@@ -170,7 +170,7 @@ export function GroupShowcase({
       : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
 
   return (
-    <section className="py-6">
+    <section className="py-4">
       <ShowcaseHeader title={title} subtitle={subtitle} href={href} />
       <div className={`grid ${gridColumns} gap-4`}>
         {visibleGroups.map((group) => (

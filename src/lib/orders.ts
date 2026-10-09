@@ -13,7 +13,23 @@ export interface ShippingAddress {
   state: string;
   postalCode: string;
   phone: string;
+  country: string;
 }
+
+export type PaymentMethod =
+  | "CARD"
+  | "STRIPE"
+  | "RAZORPAY"
+  | "ONLINE"
+  | "COD";
+
+export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
+  CARD: "Credit / Debit Card",
+  STRIPE: "Stripe",
+  RAZORPAY: "Razorpay",
+  ONLINE: "Online Payment",
+  COD: "Cash on Delivery",
+};
 
 export interface Order {
   id: string;
@@ -21,6 +37,7 @@ export interface Order {
   status: "PENDING" | "CONFIRMED" | "SHIPPED" | "DELIVERED" | "CANCELLED";
   items: OrderItem[];
   shippingAddress: ShippingAddress;
+  paymentMethod?: PaymentMethod;
   subtotal: number;
   shipping: number;
   total: number;

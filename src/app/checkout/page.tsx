@@ -18,7 +18,14 @@ import {
   calculateShipping,
   FREE_SHIPPING_THRESHOLD,
 } from "@/lib/checkout";
-import { saveOrder, type Order, type ShippingAddress } from "@/lib/orders";
+import { getProductById } from "@/data/products";
+import PaymentMethod from "@/components/checkout/PaymentMethod";
+import {
+  saveOrder,
+  type Order,
+  type PaymentMethod as PaymentMethodId,
+  type ShippingAddress,
+} from "@/lib/orders";
 
 type AddressField = keyof ShippingAddress;
 
@@ -31,6 +38,19 @@ const ADDRESS_FIELDS: { key: AddressField; label: string; placeholder: string; t
   { key: "phone", label: "Phone", placeholder: "+1 555 000 1234", type: "tel", autoComplete: "tel" },
 ];
 
+const COUNTRIES = [
+  "India",
+  "United States",
+  "United Kingdom",
+  "United Arab Emirates",
+  "Canada",
+  "Australia",
+  "Germany",
+  "France",
+  "Singapore",
+  "Japan",
+];
+
 const EMPTY_ADDRESS: ShippingAddress = {
   fullName: "",
   street: "",
@@ -38,6 +58,7 @@ const EMPTY_ADDRESS: ShippingAddress = {
   state: "",
   postalCode: "",
   phone: "",
+  country: "India",
 };
 
 export default function CheckoutPage() {
@@ -50,6 +71,17 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+
+  const internationalAddress = address.country !== "India";
+  const internationalItems = items.some(
+    (item) => getProductById(item.productId)?.isInternational === true
+  );
+  const codAllowed = !internationalAddress && !internationalItems;
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodId>("CARD");
+
+  // Force prepaid whenever COD becomes unavailable (never leave COD selected).
+  const effectivePaymentMethod: PaymentMethodId =
+    paymentMethod === "COD" && !codAllowed ? "CARD" : paymentMethod;
 
   const shipping = calculateShipping(subtotal);
   const total = subtotal + shipping;
@@ -99,7 +131,9 @@ export default function CheckoutPage() {
             state: address.state.trim(),
             postalCode: address.postalCode.trim(),
             phone: address.phone.trim(),
+            country: address.country,
           },
+          paymentMethod: effectivePaymentMethod,
         }),
       });
 
@@ -201,12 +235,42 @@ export default function CheckoutPage() {
                     )}
                   </div>
                 ))}
+                <div>
+                  <label
+                    htmlFor="country"
+                    className="block text-sm font-medium text-gray-700 mb-1.5"
+                  >
+                    Country
+                  </label>
+                  <select
+                    id="country"
+                    autoComplete="country-name"
+                    value={address.country}
+                    onChange={(event) => setField("country", event.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white"
+                  >
+                    {COUNTRIES.map((country) => (
+                      <option key={country} value={country}>
+                        {country}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="flex items-center gap-2 text-xs text-gray-500 mt-5 border-t border-gray-100 pt-4">
                 <ShieldCheck size={15} className="text-emerald-600" />
                 Your data is encrypted and never shared with sellers.
               </div>
+            </div>
+
+            <div className="mt-6">
+              <PaymentMethod
+                value={effectivePaymentMethod}
+                onChange={setPaymentMethod}
+                internationalAddress={internationalAddress}
+                internationalItems={internationalItems}
+              />
             </div>
           </div>
 

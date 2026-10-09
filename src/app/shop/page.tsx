@@ -274,7 +274,7 @@ function ShopContent() {
                       key={product.id}
                       className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition flex flex-col"
                     >
-                      <div className="h-48 overflow-hidden bg-gray-100 relative">
+                      <div className="aspect-square overflow-hidden bg-gray-50 relative">
                         <Link
                           href={`/products/${product.id}`}
                           className="block w-full h-full"

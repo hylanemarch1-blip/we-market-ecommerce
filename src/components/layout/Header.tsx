@@ -35,14 +35,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Contact", href: "/contact" },
 ];
 
-const TOP_BAR_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Offer Zone", href: "/shop?sale=true" },
-  { label: "Categories", href: "/shop" },
-  { label: "Orders", href: "/account/orders" },
-  { label: "Contact", href: "/contact" },
-];
-
 const LANGUAGES = [
   { code: "en", label: "English", flag: "🇺🇸" },
   { code: "fr", label: "Français", flag: "🇫🇷" },
@@ -87,23 +79,6 @@ export default function Header() {
       {/* Top Utility Bar */}
       <div className="bg-white border-b border-gray-100 text-xs hidden lg:block">
         <div className="max-w-[1440px] mx-auto px-4 flex items-center justify-between h-10">
-          <ul className="flex gap-5 text-gray-500">
-            {TOP_BAR_LINKS.map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className={`hover:text-emerald-600 transition-colors ${
-                    link.label === "Offer Zone"
-                      ? "font-semibold text-orange-500 hover:text-orange-600"
-                      : ""
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
           <div className="text-center">
             <span className="text-gray-500">Free shipping for all orders over </span>
             <span className="font-bold text-emerald-600">{format(FREE_SHIPPING_THRESHOLD)}</span>
@@ -166,7 +141,7 @@ export default function Header() {
 
       {/* Main Header */}
       <header className="sticky top-0 z-40 bg-white shadow-sm">
-        <div className="max-w-[1440px] mx-auto px-4 py-3 flex items-center gap-4 lg:gap-6">
+        <div className="max-w-[1440px] mx-auto px-4 py-1 max-h-[52px] flex items-center gap-4 lg:gap-6">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -367,16 +342,14 @@ export default function Header() {
                     </Link>
 
                     {item.children && activeSubNav === item.label && (
-                      <ul className={`absolute top-full left-0 bg-white border border-gray-200 rounded-b-lg shadow-lg py-2 z-50 min-w-[200px] ${
-                        item.label === "Categories"
-                          ? "grid grid-cols-2 min-w-[440px]"
-                          : ""
+                      <ul className={`absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-50 w-52 max-w-[210px] ${
+                        item.label === "Categories" ? "max-h-[420px] overflow-y-auto" : "min-w-[200px]"
                       }`}>
                         {item.children.map((child) => (
                           <li key={child.label}>
                             <Link
                               href={child.href}
-                              className="block px-5 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 whitespace-nowrap"
+                              className="block text-xs font-medium py-1.5 px-2 mx-1 text-slate-700 hover:bg-slate-100 hover:text-emerald-600 rounded whitespace-nowrap"
                             >
                               {child.label}
                             </Link>
@@ -401,39 +374,36 @@ export default function Header() {
       {/* Category Sidebar Overlay */}
       {isSidebarOpen && (
         <div className="fixed inset-0 z-50 flex">
-          <div className="w-full max-w-[320px] bg-white h-full shadow-2xl overflow-y-auto">
-            <div className="p-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
-              <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                <Grid size={18} className="text-emerald-600" /> All Categories
+          <div className="w-52 max-w-[210px] bg-white h-full shadow-2xl overflow-y-auto">
+            <div className="px-3 py-3 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
+              <h3 className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                <Grid size={14} className="text-emerald-600" /> All Categories
               </h3>
               <button
                 onClick={() => setIsSidebarOpen(false)}
-                className="p-1.5 hover:bg-gray-100 rounded-full text-gray-500 transition-colors"
+                className="p-1 hover:bg-gray-100 rounded-full text-gray-500 transition-colors"
               >
-                <X size={20} />
+                <X size={16} />
               </button>
             </div>
 
-            <div className="py-2">
+            <div className="p-2">
               {CATEGORIES.map((category) => (
-                <div key={category.slug} className="border-b border-gray-100 last:border-0">
-                  <Link
-                    href={`/shop?category=${category.slug}`}
-                    onClick={() => setIsSidebarOpen(false)}
-                    className="w-full flex items-center justify-between gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-left"
-                  >
-                    {category.label}
-                    <ChevronDown size={14} className="-rotate-90 text-gray-300" />
-                  </Link>
-                </div>
+                <Link
+                  key={category.slug}
+                  href={`/shop?category=${category.slug}`}
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="block text-xs font-medium py-1.5 px-2 mb-0.5 text-slate-700 hover:bg-slate-100 hover:text-emerald-600 rounded transition-colors text-left leading-snug"
+                >
+                  {category.label}
+                </Link>
               ))}
               <Link
                 href="/shop?sale=true"
                 onClick={() => setIsSidebarOpen(false)}
-                className="w-full flex items-center justify-between gap-3 px-5 py-3 text-sm font-bold text-orange-500 hover:bg-orange-50 transition-colors text-left"
+                className="block text-xs font-bold py-1.5 px-2 mt-1 text-orange-500 hover:bg-slate-100 rounded transition-colors text-left"
               >
                 Offer Zone
-                <ChevronDown size={14} className="-rotate-90 text-orange-300" />
               </Link>
             </div>
           </div>

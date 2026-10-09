@@ -99,13 +99,21 @@ export default function AccountOrdersPage() {
                       </p>
                     </div>
                   </div>
-                  <span
-                    className={`text-xs font-bold px-3 py-1.5 rounded-full ${
-                      STATUS_STYLES[order.status]
-                    }`}
-                  >
-                    {order.status}
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`text-xs font-bold px-3 py-1.5 rounded-full ${
+                        STATUS_STYLES[order.status]
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                    <Link
+                      href={`/orders/${order.id}/track`}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 hover:text-emerald-700 border border-emerald-200 hover:border-emerald-400 px-3 py-1.5 rounded-full transition-colors"
+                    >
+                      Track Order <ArrowRight size={12} />
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="p-5 space-y-4">

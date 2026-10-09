@@ -13,7 +13,7 @@ export default function Home() {
       <FestivalSaleCarousel />
 
       {/* Hero Section */}
-      <section className="mt-4">
+      <section>
         <AutoHeroBanner />
       </section>
 
